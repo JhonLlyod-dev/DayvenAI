@@ -3,7 +3,7 @@ import { Clock } from "lucide-react";
 export default function Reminder({data}){
 
   const statusStyles = {
-    "On Time": "text-green-500 ",
+    "On Time": "text-green-500 ", // Change to ongoing
     "Scheduled": "text-gradient1 ",
     "Missed": "text-red-500 ",
   };

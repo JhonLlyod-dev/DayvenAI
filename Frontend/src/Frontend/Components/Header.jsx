@@ -1,11 +1,12 @@
 import Logo from '../Images/Logo/Time.png'
-import { CalendarClock, Bell, CalendarPlus2, UserRound} from 'lucide-react'
+import { CalendarClock, Bell, CalendarPlus2, UserRound,LogOut} from 'lucide-react'
 import Checkbox from './Ham'
 import Tooltip from './Tooltip'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import Logout from '../../Backend/Functions/Logout'
 
-export default function Header(){
+export default function Header({user}){
   const [NavIC,setNavIC] = useState(false);
 
 
@@ -82,7 +83,8 @@ export default function Header(){
             </div>  
             {Navs}
           </li>
-          <li className='font-bold hidden sm:inline-block text-sm sm:text-base motion-preset-slide-down-lg motion-delay-100 z-5'>Jhon Llyod Navarro</li>
+          <li className='font-bold hidden sm:inline-block text-sm sm:text-base motion-preset-slide-down-lg motion-delay-100 z-5'>{user.displayName}</li>
+          <li onClick={() => Logout()} className='hover:text-red-500'><LogOut size={18} strokeWidth={2.5}/></li>
         </ul>
       </div>
     </div>

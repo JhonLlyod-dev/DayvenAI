@@ -3,8 +3,20 @@ import logo2 from '../Images/Logo/time_bg.png'
 import { ArrowRight } from 'lucide-react'
 
 import { Link } from 'react-router-dom';
+import { useNavigate} from "react-router-dom";
+
+import Authenticate from '../../Backend/Functions/Auth';
 
 export default function Landing(){
+    const navigate = useNavigate();
+
+  function Signin(){
+    Authenticate().
+    then((user) => {
+      navigate('/dashboard');
+    }).
+    catch((error) => console.error(error));
+  }
 
   return(
     <div className='poppins-medium p-4 md:px-15 text-myblack flex flex-col gap-20'>
@@ -20,11 +32,10 @@ export default function Landing(){
             <li>Blog</li>
             <li>Contact Us</li>
           </ul>
-          <Link to='/dashboard'>
-            <button className='gradient-bg btn'>
+
+            <button onClick={Signin} className='gradient-bg btn'>
               Sign In
             </button>
-          </Link>
         </div>
       </div>
 

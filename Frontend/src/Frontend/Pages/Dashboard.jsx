@@ -29,7 +29,7 @@ export default function Dashboard() {
 
         {/* Reminders */}
         <div className="motion-preset-blur-up-lg motion-delay-100 bg-smoothWhite shadow-md border-t-3 border-gradient1 rounded-xl p-4 flex-1 flex flex-col justify-start min-h-[14rem] h-full">
-          <h3 className="text-lg flex items-center gap-1 font-bold mb-2"><BellRing className="text-gradient1 mr-1" size={20} strokeWidth={2} /> Reminders</h3>
+          <h3 className="text-lg flex items-center gap-1 font-bold mb-2"><BellRing className="text-gradient1 mr-1" size={20} strokeWidth={2} /> Today</h3>
 
           <div className=" max-h-70 overflow-auto">
             <div className="flex flex-col gap-2 h-auto overflow-scroll">

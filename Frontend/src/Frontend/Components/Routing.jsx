@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom"
 import Header from "./Header"
 import Navbar from "./Navbar"
-export default function Routing(){
+export default function Routing({user}){
   return(
   <div className="flex flex-col h-screen">
-    <Header/>
+    <Header user={user}/>
     <main className="h-full">
       <Outlet/>
     </main>

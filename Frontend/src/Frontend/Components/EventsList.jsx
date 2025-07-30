@@ -27,9 +27,9 @@ export default function EventsData({data}){
   // UI for action buttons like mark as done, edit, delete
   const Action = (
     <div className="absolute z-5 border border-gray-200 border-t-3 border-t-gradient1 bg-smoothWhite rounded-lg w-fit top-1/4 right-10  flex flex-col p-4 gap-2 motion-preset-fade-md">
-      <button className="text-sm poppins-semibold  hover:text-green-500 transition" onClick={() => console.log('Mark as done')}>Mark as done</button>
-      <button className="text-sm poppins-semibold  hover:text-gradient1 transition" onClick={() => console.log('Edit')}>Edit</button>
-      <button className="text-sm poppins-semibold  hover:text-red-500 transition" onClick={() => console.log('Delete')}>Delete</button>
+      <button className="text-sm poppins-semibold  hover:text-green-500 transition hover:underline" onClick={() => console.log('Mark as done')}>Mark as done</button>
+      <button className="text-sm poppins-semibold  hover:text-gradient1 transition hover:underline" onClick={() => console.log('Edit')}>Edit</button>
+      <button className="text-sm poppins-semibold  hover:text-red-500 transition hover:underline" onClick={() => console.log('Delete')}>Delete</button>
     </div>
   );
 

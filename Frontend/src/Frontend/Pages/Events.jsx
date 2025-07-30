@@ -82,7 +82,7 @@ const queries = Filter(Search);
           </div>
 
           <div className="border-l-3 border-l-gradient1 bg-smoothWhite rounded-lg flex flex-col gap-2 shadow-md border border-gray-200 w-full p-4 md:p-8 ">
-            <h1 className="poppins-bold">Monthly Events Added</h1>
+            <h1 className="poppins-bold">Annual Event Summary</h1>
             <EventChart/>
           </div>
 
@@ -90,7 +90,7 @@ const queries = Filter(Search);
             <div className="border-t-3 border-t-gradient1 bg-smoothWhite rounded-lg flex flex-col shadow-md border border-gray-200 w-full p-4 ">
               <h1 className="poppins-bold">Event Source Summary</h1>
               <EventPieChart/>
-              <p className="poppins-semibold w-full text-center text-sm">Events created by you and AI</p>
+              <p className="poppins-semibold w-full text-center text-sm">Events created by you and Dayven</p>
             </div>
 
             <div className="border-t-3 border-t-gradient1 bg-smoothWhite rounded-lg flex flex-col gap-2 shadow-md border border-gray-200 w-full p-4  ">
@@ -102,7 +102,7 @@ const queries = Filter(Search);
 
         <div className="border-t-3 border-t-gradient1 bg-smoothWhite rounded-lg flex-1 flex flex-col gap-4 shadow-md border border-gray-200 w-full p-4 mb-8 md:mb-0">
           <div className="flex justify-between items-center">
-            <h1 className="poppins-bold">All Scheduled Events</h1>
+            <h1 className="poppins-bold">Scheduled</h1>
             <button onClick={()=> setAddevent(true)} className="bg-gradient1 text-xs rounded-md text-smoothWhite poppins-semibold p-2 px-4 w-fit flex-center gap-2">Create Event <Plus size={15} strokeWidth={3}/></button>
           </div>
           <div className="flex gap-4">
