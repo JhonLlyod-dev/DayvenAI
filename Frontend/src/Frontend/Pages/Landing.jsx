@@ -2,6 +2,8 @@ import logo from '../Images/Logo/Time.png'
 import logo2 from '../Images/Logo/time_bg.png'
 import { ArrowRight } from 'lucide-react'
 
+import { Link } from 'react-router-dom';
+
 export default function Landing(){
 
   return(
@@ -18,9 +20,11 @@ export default function Landing(){
             <li>Blog</li>
             <li>Contact Us</li>
           </ul>
-          <button className='gradient-bg btn'>
-            Sign In
-          </button>
+          <Link to='/dashboard'>
+            <button className='gradient-bg btn'>
+              Sign In
+            </button>
+          </Link>
         </div>
       </div>
 
@@ -33,9 +37,11 @@ export default function Landing(){
           <p className='text-sm sm:text-base md:text-lg lg:text-xl text-myblack/60'>
             DayvenAI is a smart scheduling assistant that helps you organize your day, manage events, and generate optimal plans using AI based on your availability and priorities.
           </p>
-          <button className='gradient-bg btn flex items-center gap-2'>
-            Get Started <ArrowRight size={20} />
-          </button>
+          <Link to='/dashboard'>
+            <button className='gradient-bg btn flex items-center gap-2'>
+              Get Started <ArrowRight size={20} />
+            </button>
+          </Link>
         </div>
 
         {/* Right Section (Image/Illustration) */}
