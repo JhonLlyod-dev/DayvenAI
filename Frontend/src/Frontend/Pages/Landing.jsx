@@ -48,11 +48,9 @@ export default function Landing(){
           <p className='text-sm sm:text-base md:text-lg lg:text-xl text-myblack/60'>
             DayvenAI is a smart scheduling assistant that helps you organize your day, manage events, and generate optimal plans using AI based on your availability and priorities.
           </p>
-          <Link to='/dashboard'>
-            <button className='gradient-bg btn flex items-center gap-2'>
+            <button  onClick={Signin} className='gradient-bg btn flex items-center gap-2'>
               Get Started <ArrowRight size={20} />
             </button>
-          </Link>
         </div>
 
         {/* Right Section (Image/Illustration) */}
