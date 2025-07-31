@@ -1,8 +1,9 @@
-import { Settings } from "lucide-react";
+import { Settings,Download } from "lucide-react";
 import { weekAvailability } from "../../Backend/Data/Data";
 import { useEffect, useState } from "react";
+import Table from "../Components/Table";
 
-export default function Profile(){
+export default function Profile({user}){
 
   const [Setter,setSetter] = useState(weekAvailability);
   const [Changes,setChanges]= useState(false);
@@ -36,12 +37,11 @@ export default function Profile(){
 
       <div className=" bg-smoothWhite rounded-lg flex flex-col gap-2 shadow-md border border-gray-200 w-full p-4 md:p-8 ">
         <div className="motion-preset-fade-md motion-delay-150 flex items-center  gap-2 mb-10">
-          <div className="bg-blue-200 text-blue-600 poppins-bold h-15 w-15 md:h-20 md:w-20 rounded-full flex-center">
-            IMG
-          </div>
+          <img src={user.photoURL} className="bg-blue-200 text-blue-600 poppins-bold h-15 w-15 md:h-20 md:w-20 rounded-full flex-center"/>
+ 
           <div>
-            <h3 className="poppins-extrabold text-xl md:text-4xl text-gradient1">Jhon Llyod Navarro</h3>
-            <h4 className="text-sm md:text-base font-medium text-myblack/70">navarro.jhonllyod2005@gmail.com</h4>
+            <h3 className="poppins-extrabold text-xl md:text-4xl text-gradient1">{user.displayName}</h3>
+            <h4 className="text-sm md:text-base font-medium text-myblack/70">{user.email}</h4>
           </div>
         </div>
 
@@ -78,13 +78,15 @@ export default function Profile(){
 
           <button onClick={Apply} disabled={!Changes} className={`self-center ${Changes ? 'bg-gradient1':'bg-gradient1/50'}  
           motion-preset-fade-md motion-delay-300
-          text-xs md:text-sm rounded-md mt-3 md:mt-5 text-smoothWhite poppins-semibold p-2 px-4 w-fit`}>Apply changes</button>
+          text-xs md:text-sm rounded-md mt-3 md:mt-5 text-smoothWhite poppins-semibold p-2 px-4 w-fit anim`}>Apply changes</button>
         </div>
 
-        <div>
-          Working Schedule
+        <h2 className="poppins-bold text-lg md:text-xl">Working Schedule</h2>
+        <div className="w-full flex-center">
+          <Table/>
         </div>
-
+        
+          <button onClick={Apply} disabled={!Changes} className="mt-2 px-4 py-2 text-sm anim rounded-md bg-gradient1 text-smoothWhite w-fit self-center flex-center gap-2 poppins-semibold">Download<Download size={18} strokeWidth={2.5} /></button>
 
       </div>
     </div>

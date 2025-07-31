@@ -51,7 +51,7 @@ function App() {
           <Route element={<Routing user={user}/>}>
             <Route path='/dashboard' element={<Dashboard/>}/>
             <Route path='/calendar' element={<Calendar/>}/>
-            <Route path='/profile' element={<Profile/>}/>
+            <Route path='/profile' element={<Profile user={user}/>}/>
             <Route path='/events' element={<Events/>}/>
           </Route>
         </Route>

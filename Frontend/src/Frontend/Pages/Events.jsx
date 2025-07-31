@@ -103,7 +103,7 @@ const queries = Filter(Search);
         <div className="border-t-3 border-t-gradient1 bg-smoothWhite rounded-lg flex-1 flex flex-col gap-4 shadow-md border border-gray-200 w-full p-4 mb-8 md:mb-0">
           <div className="flex justify-between items-center">
             <h1 className="poppins-bold">Scheduled</h1>
-            <button onClick={()=> setAddevent(true)} className="bg-gradient1 text-xs rounded-md text-smoothWhite poppins-semibold p-2 px-4 w-fit flex-center gap-2">Create Event <Plus size={15} strokeWidth={3}/></button>
+            <button onClick={()=> setAddevent(true)} className="anim bg-gradient1 text-xs rounded-md text-smoothWhite poppins-semibold p-2 px-4 w-fit flex-center gap-2">Create Event <Plus size={15} strokeWidth={3}/></button>
           </div>
           <div className="flex gap-4">
             <div className=" flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full p-2 px-4">

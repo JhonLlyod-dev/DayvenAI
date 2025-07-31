@@ -33,9 +33,9 @@ export default function Landing(){
             <li>Contact Us</li>
           </ul>
 
-            <button onClick={Signin} className='gradient-bg btn'>
-              Sign In
-            </button>
+          <button onClick={Signin} className='gradient-bg btn'>
+            Sign In
+          </button>
         </div>
       </div>
 
