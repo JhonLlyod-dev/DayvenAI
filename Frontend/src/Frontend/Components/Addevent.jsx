@@ -121,7 +121,7 @@ export default function Addevent({Visible,Close,UID}) {
               {/* Start Date */}
               <div className="flex flex-col gap-1">
                 <label className="poppins-bold text-xs md:text-sm">Start Date</label>
-                <input value={startDate} onChange={(e) => setStartDate(e.target.value)} type="date" className=" outline-0 text-myblack text-sm font-medium border border-gray-200 shadow-sm rounded-lg p-2 px-4" />
+                <input value={startDate} onChange={(e) => {setStartDate(e.target.value); setEndDate(e.target.value);}} type="date" className=" outline-0 text-myblack text-sm font-medium border border-gray-200 shadow-sm rounded-lg p-2 px-4" />
               </div>
 
               {/* End Date */}
@@ -153,7 +153,7 @@ export default function Addevent({Visible,Close,UID}) {
                   {/* Time In */}
                   <div className="flex flex-col gap-1">
                     <label className="poppins-bold text-xs md:text-sm">Time In</label>
-                    <input value={startTime} onChange={(e) => setStartTime(e.target.value)} type="time" className="outline-0 text-sm font-medium border border-gray-200 shadow-sm rounded-lg p-2 px-4" />
+                    <input value={startTime} onChange={(e) => {setStartTime(e.target.value); setEndTime(e.target.value);}} type="time" className="outline-0 text-sm font-medium border border-gray-200 shadow-sm rounded-lg p-2 px-4" />
                   </div>
 
                   {/* Time Out */}

@@ -1,14 +1,30 @@
 import { Clock } from "lucide-react";
+import { setTime } from "../../Backend/Functions/TimeFilter";
 
 export default function Reminder({data}){
 
+    const Time = ()=>{
+  
+      let Time = '';
+  
+      if(data.time.allDay === true){
+        Time = 'All day';
+      } else if(data.time.start === data.time.end){
+        Time = setTime(data.time.start);
+      } else {
+        Time = `${setTime(data.time.end)}`;
+      }
+  
+      return Time;
+    }
+
   const statusStyles = {
-    "On Time": "text-green-500 ", // Change to ongoing
+    "Ongoing": "text-green-500 ", // Change to ongoing
     "Scheduled": "text-gradient1 ",
     "Missed": "text-red-500 ",
   };
   const statusBG = {
-    "On Time": "bg-green-500 ",
+    "Ongoing": "bg-green-500 ",
     "Scheduled": "bg-gradient1 ",
     "Missed": "bg-red-500 ",
   };
@@ -22,14 +38,14 @@ export default function Reminder({data}){
 
         {/* Main Content */}
         <div className="flex flex-col w-full min-w-0">
-          <h4 className="font-semibold text-sm text-myblack">{data.title}</h4>
-          <p className="text-sm font-medium text-gray-500 truncate">{data.message}</p>
+          <h4 className="poppins-semibold text-sm text-myblack">{data.title}</h4>
+          <p className="text-sm font-medium text-gray-500 truncate">{data.note}</p>
         </div>
       </div>
 
       {/* Time + Status */}
       <div className="flex flex-col items-end text-right text-xs font-semibold text-gray-600 whitespace-nowrap ml-4">
-        <span className="font-bold">{data.time}</span>
+        <span className="font-bold">{Time()}</span>
         <span className={`${statusStyles[data.status]} mt-1 flex items-center gap-1`}>
           <span className={`inline-block w-2 h-2 ${statusBG[data.status]} rounded-full`}></span>
             {data.status}

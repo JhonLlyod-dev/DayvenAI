@@ -4,7 +4,8 @@ import Chatbox from "../Components/Chatbox.jsx";
 import Charts from "../Components/Charts.jsx";
 import Notif from "../Components_small/Notif.jsx";
 import Upcoming from "../Components/Upcoming.jsx";
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import dayjs from "dayjs";
 
 import { Link } from "react-router-dom";
 
@@ -14,9 +15,20 @@ import { BellRing,Pin, ChevronRight,Bot,ChartNoAxesColumn } from "lucide-react";
 
 export default function Dashboard({myEvent}) {
 
-  const [Events,setEvents] = useState(myEvent);
+  const [Events, setEvents] = useState([]);
 
-  const Upevents = Events.filter((item) => item.status === 'Scheduled').slice(0,6);
+  useEffect(() => {
+    if (myEvent && myEvent.length > 0) {
+      setEvents(myEvent);
+    }
+  }, [myEvent]);
+
+   
+
+  const Upevents = Events.filter((item) => dayjs(item.start).isAfter(dayjs(), 'day')).slice(0,6);
+  const Today = Events.filter((item) => item.start === dayjs().format('YYYY-MM-DD'));
+
+  
 
   return (
     <div className="motion-preset-fade-lg px-4 md:px-10 pb-4 text-myblack  w-full min-h-full flex flex-col gap-6">
@@ -36,8 +48,8 @@ export default function Dashboard({myEvent}) {
 
           <div className=" max-h-70 overflow-auto">
             <div className="flex flex-col gap-2 h-auto overflow-scroll">
-              {reminders && reminders.length > 0 ? (
-                reminders.map((data, i) => (
+              {Today && Today.length > 0 ? (
+                Today.map((data, i) => (
                   <Reminder data={data} key={i} />
                 ))
               ) : (
@@ -73,17 +85,19 @@ export default function Dashboard({myEvent}) {
                 <Upcoming data={data} key={i} />
               ))
             ) : (
-              <h3 className="text-myblack/70 font-medium text-center mt-10">
+              <h3 className="text-myblack/70 col-span-2 font-medium text-center mt-20">
                 You’re all caught up! Enjoy a stress-free day.
               </h3>
             )}
           </div>
           <div className="w-full flex-center">
-            <Link to='/events'>
-              <div className="mt-4 md:mt-6 transition-all ease-in duration-75 flex-center hover:text-gradient1">
-                <span className=" text-sm poppins-semibold ">more</span> <ChevronRight size={18}/>
-              </div>
-            </Link>
+            {Upevents?.length > 0 && 
+              <Link to='/events'>
+                <div className="mt-4 md:mt-6 transition-all ease-in duration-75 flex-center hover:text-gradient1">
+                  <span className=" text-sm poppins-semibold ">more</span> <ChevronRight size={18}/>
+                </div>
+              </Link>
+            }
           </div>
         </div>
 

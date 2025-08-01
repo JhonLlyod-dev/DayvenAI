@@ -6,11 +6,18 @@ import EventsData from "../Components/EventsList";
 import { EventChart,EventPieChart } from "../Components/Charts";
 import { MiniCalendar } from "../Components/Calendar";
 import Addevent from "../Components/Addevent";
+import dayjs from "dayjs";
 
 
 export default function Events({user,myEvent}){
 
-  const [Events, setEvents] = useState(myEvent);
+  const [Events, setEvents] = useState([]);
+
+  useEffect(() => {
+    if (myEvent && myEvent.length > 0) {
+      setEvents(myEvent);
+    }
+  }, [myEvent]);
   const [Search, setSearch] = useState('');
   const [Order, setOrder] = useState('');
   const [addevent,setAddevent] = useState(false);
@@ -29,8 +36,8 @@ const Filter = (Search) => {
 };
 
 const EventCount = Events.filter((item) => item.activty === 'Active').length;
-const UpcomingCount = Events.filter((item) => item.status === 'Scheduled').length;
-const TodayCount = Events.filter((item) => item.status === 'Today').length;
+const UpcomingCount = Events.filter((item) => dayjs(item.start).isAfter(dayjs(), 'day')).length;
+const TodayCount = Events.filter((item) => dayjs(item.start).isSame(dayjs(), 'day')).length;
 
 const queries = Filter(Search);
 
@@ -121,9 +128,9 @@ const queries = Filter(Search);
                 name=""
                 id=""
               >
-                <option value="Latest" className="font-medium ">New</option>
-                <option value="Oldest" className="font-medium">Old</option>
-                <option value="Upcoming" className="font-medium">Upcoming</option>
+                <option value="All" className="font-medium ">All</option>
+                <option value="New" className="font-medium">New</option>
+                <option value="Old" className="font-medium">Old</option>
               </select>
               <Funnel size={18} strokeWidth={2}  />
             </div>
@@ -134,8 +141,8 @@ const queries = Filter(Search);
                 name=""
                 id=""
               >
-                <option value="Today" className="font-medium ">Today</option>
-                <option value="Upcoming" className="font-medium">Upcoming</option>
+                <option value="Ongoing" className="font-medium ">Ongoing</option>
+                <option value="Scheduled" className="font-medium">Scheduled</option>
                 <option value="Missed" className="font-medium">Missed</option>
               </select>
               <Funnel size={18} strokeWidth={2} />

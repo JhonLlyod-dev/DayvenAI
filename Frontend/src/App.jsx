@@ -16,6 +16,7 @@ import { auth } from './Backend/Firebase/Api';
 import { useState,useEffect } from 'react'
 
 import { fetchEvents } from './Backend/Functions/EventsAction';
+import Checker from './Backend/Functions/Filter';
 
 function App() {
 
@@ -23,20 +24,19 @@ function App() {
   const [Fetching,setFetching ] = useState(true);
   const [MyEvents, setMyEvents] = useState([]);
 
+  setInterval(async () => {
+  
+    await Checker(MyEvents);
+
+  }, 15000);
+
 useEffect(() => {
   const unsubscribe = onAuthStateChanged(auth, async (user) => {
     if (user) {
       setUser(user);
 
-      // fetch events only if user exists
-      const data = await fetchEvents(user.uid);
+      fetchEvents(user.uid, (data) => setMyEvents(data));
 
-      if (!data.empty) {
-        setMyEvents(data);
-        console.log(data);
-      } else {
-        console.log("No events");
-      }
     } else {
       setUser(null);
       setFetching(false);

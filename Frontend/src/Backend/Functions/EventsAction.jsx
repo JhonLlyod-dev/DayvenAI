@@ -6,6 +6,7 @@ import {
   onSnapshot,
   collection,
   getDocs,
+  updateDoc,
   orderBy,
   query,
   where
@@ -43,26 +44,42 @@ export default async function addEvent(Title,Type,startDate,endDate,allday,Time,
   }
 }
 
-// Fetch events
-export const fetchEvents = async (UID) => {
-  try {
-    const q = query(collection(db, "Events"), where('UID', '==', UID), orderBy('createdAt', 'asc'));
-    const querySnapshot = await getDocs(q);
 
-    if (!querySnapshot.empty) {
-      const data = querySnapshot.docs.map(doc => ({
+export async function fetchEvents(userUID, callback) {
+  const ref = collection(db, 'Events');
+  const q = query(ref, where("UID", "==", userUID), orderBy("createdAt", "desc"));
+
+  try {
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const Data = snapshot.docs.map((doc) => ({
         id: doc.id,
-        ref: doc.ref,
         ...doc.data()
       }));
-      console.log('✅ Events fetched successfully');
-      console.log(data);
-      return data;
+      callback(Data); // send data to the provided callback function
+    });
+
+    return unsubscribe; // You can call this to stop listening
+
+  } catch (error) {
+    console.log("Error fetching events:", error);
+  }
+}
+
+
+export async function UpdateEvent(id,status){
+  console.log('Updating event with ID:', id);
+
+  const docRef = doc(db, "Events", id);
+  try {
+    if(status === 'Missed'){
+      await updateDoc(docRef, { status: status, activty:'Inactive' });
+      console.log(`Event status updated to ${status}`);
+      return;
     }
 
-    return []; // Return empty array if no events
+    await updateDoc(docRef, { status: status });
+    console.log(`Event status updated to ${status}`);
   } catch (error) {
-    console.error('❌ Error fetching events:', error);
-    return [];
+    console.error('❌ Error updating event:', error);
   }
-};
+}

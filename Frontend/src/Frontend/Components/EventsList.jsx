@@ -7,6 +7,23 @@ import { setTime,formatToMonthDay } from "../../Backend/Functions/TimeFilter";
 
 export default function EventsData({data}){
 
+
+  const Time = ()=>{
+
+    let Time = '';
+
+    if(data.time.allDay === true){
+      Time = 'All day';
+    } else if(data.time.start === data.time.end){
+      Time = setTime(data.time.start);
+    } else {
+      Time = `${setTime(data.time.start)} - ${setTime(data.time.end)}`;
+    }
+
+
+    return Time;
+  }
+
   const Date = formatToMonthDay(data.start);
   const [Pop,setPop] = useState(false);
   const Popup = () => {
@@ -18,7 +35,7 @@ export default function EventsData({data}){
           <span className="text-sm poppins-semibold text-myblack">{data.title}</span>
           <span className="text-xs poppins-semibold text-myblack">{data.status}</span>
         </div>
-        <span className="text-xs text-gray-500 flex items-center gap-1 poppins-semibold"><Clock size={15} strokeWidth={2.5} />{data.time.allDay === true ? 'All day' : <>{setTime(data.time.start)} - {setTime(data.time.end)}</>} </span>
+        <span className="text-xs text-gray-500 flex items-center gap-1 poppins-semibold"><Clock size={15} strokeWidth={2.5} />{data.time.allDay === true ? 'All day' : Time()} </span>
         <span className="mt-1 px-2 py-0.5 poppins-semibold bg-blue-100 text-blue-600 rounded text-xs w-fit">{data.type}</span>
         <span className="mt-2 text-xs text-gray-500 flex items-center gap-1 poppins-semibold">{data.note}</span>
       </div>
@@ -47,7 +64,7 @@ export default function EventsData({data}){
         </div>
         <div className="flex-1 flex flex-col text-sm">
           <span className="text-base poppins-semibold text-myblack">{data.title}</span>
-          <span className="text-gray-500 text-xs flex items-center gap-1 poppins-semibold"><Clock size={15} strokeWidth={2.5} /> {data.time.allDay === true ? 'All day' : <>{setTime(data.time.start)} - {setTime(data.time.end)}</>}</span>
+          <span className="text-gray-500 text-xs flex items-center gap-1 poppins-semibold"><Clock size={15} strokeWidth={2.5} /> {data.time.allDay === true ? 'All day' : Time()}</span>
           <span className="mt-1 px-2 py-0.5 poppins-semibold bg-blue-100 text-blue-600 rounded text-xs w-fit">{data.type}</span>
         </div>
       </div>
