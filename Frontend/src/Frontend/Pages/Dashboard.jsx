@@ -1,19 +1,22 @@
 import { MiniCalendar } from "../Components/Calendar";
 import Reminder from "../Components/Reminders.jsx";
-import Upcoming from "../Components/Upcoming.jsx";
 import Chatbox from "../Components/Chatbox.jsx";
 import Charts from "../Components/Charts.jsx";
 import Notif from "../Components_small/Notif.jsx";
+import Upcoming from "../Components/Upcoming.jsx";
+import { useState } from "react";
 
 import { Link } from "react-router-dom";
 
-import { reminders, upcomingEvents } from '../../Backend/Data/Data.js';
+import { reminders} from '../../Backend/Data/Data.js';
  
 import { BellRing,Pin, ChevronRight,Bot,ChartNoAxesColumn } from "lucide-react";
 
-export default function Dashboard() {
+export default function Dashboard({myEvent}) {
 
-  const Upevents = upcomingEvents.slice(0,6);
+  const [Events,setEvents] = useState(myEvent);
+
+  const Upevents = Events.filter((item) => item.status === 'Scheduled').slice(0,6);
 
   return (
     <div className="motion-preset-fade-lg px-4 md:px-10 pb-4 text-myblack  w-full min-h-full flex flex-col gap-6">

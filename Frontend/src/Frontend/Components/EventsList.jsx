@@ -1,10 +1,13 @@
-import dayjs from "dayjs";
+
 import { Clock } from "lucide-react";
 import { useState} from "react";
 import { EllipsisVertical } from "lucide-react";
 
+import { setTime,formatToMonthDay } from "../../Backend/Functions/TimeFilter";
+
 export default function EventsData({data}){
 
+  const Date = formatToMonthDay(data.start);
   const [Pop,setPop] = useState(false);
   const Popup = () => {
 
@@ -13,11 +16,11 @@ export default function EventsData({data}){
       motion-preset-fade-md`}>
         <div className="flex items-center justify-between">
           <span className="text-sm poppins-semibold text-myblack">{data.title}</span>
-          <span className="text-xs poppins-semibold text-myblack">Today</span>
+          <span className="text-xs poppins-semibold text-myblack">{data.status}</span>
         </div>
-        <span className="text-xs text-gray-500 flex items-center gap-1 poppins-semibold"><Clock size={15} strokeWidth={2.5} /> {data.time}</span>
+        <span className="text-xs text-gray-500 flex items-center gap-1 poppins-semibold"><Clock size={15} strokeWidth={2.5} />{data.time.allDay === true ? 'All day' : <>{setTime(data.time.start)} - {setTime(data.time.end)}</>} </span>
         <span className="mt-1 px-2 py-0.5 poppins-semibold bg-blue-100 text-blue-600 rounded text-xs w-fit">{data.type}</span>
-        <span className="mt-2 text-xs text-gray-500 flex items-center gap-1 poppins-semibold">✅ A new event 'Marketing Presentation' has been added to your calendar.</span>
+        <span className="mt-2 text-xs text-gray-500 flex items-center gap-1 poppins-semibold">{data.note}</span>
       </div>
     )
   }
@@ -39,12 +42,12 @@ export default function EventsData({data}){
       <div onMouseEnter={() => setPop(true)} onMouseLeave={() => setPop(false)} className="flex items-center gap-4 flex-1">
         {Pop && Popup()}
         <div className="flex flex-col items-center poppins-extrabold justify-center w-16 h-16 bg-blue-100 text-blue-600 rounded-md">
-          <span className="text-xl ">{data.day}</span>
-          <span className="text-sm  uppercase">{data.month}</span>
+          <span className="text-xl ">{Date.day}</span>
+          <span className="text-sm  uppercase">{Date.month}</span>
         </div>
         <div className="flex-1 flex flex-col text-sm">
           <span className="text-base poppins-semibold text-myblack">{data.title}</span>
-          <span className="text-gray-500 text-xs flex items-center gap-1 poppins-semibold"><Clock size={15} strokeWidth={2.5} /> {data.time}</span>
+          <span className="text-gray-500 text-xs flex items-center gap-1 poppins-semibold"><Clock size={15} strokeWidth={2.5} /> {data.time.allDay === true ? 'All day' : <>{setTime(data.time.start)} - {setTime(data.time.end)}</>}</span>
           <span className="mt-1 px-2 py-0.5 poppins-semibold bg-blue-100 text-blue-600 rounded text-xs w-fit">{data.type}</span>
         </div>
       </div>

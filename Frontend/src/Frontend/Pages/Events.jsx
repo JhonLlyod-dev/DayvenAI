@@ -8,9 +8,9 @@ import { MiniCalendar } from "../Components/Calendar";
 import Addevent from "../Components/Addevent";
 
 
-export default function Events(){
+export default function Events({user,myEvent}){
 
-  const [Events, setEvents] = useState(upcomingEvents);
+  const [Events, setEvents] = useState(myEvent);
   const [Search, setSearch] = useState('');
   const [Order, setOrder] = useState('');
   const [addevent,setAddevent] = useState(false);
@@ -28,6 +28,10 @@ const Filter = (Search) => {
   return Events;
 };
 
+const EventCount = Events.filter((item) => item.activty === 'Active').length;
+const UpcomingCount = Events.filter((item) => item.status === 'Scheduled').length;
+const TodayCount = Events.filter((item) => item.status === 'Today').length;
+
 const queries = Filter(Search);
 
   function handleVisible(){
@@ -36,7 +40,7 @@ const queries = Filter(Search);
 
   return (
     <div className="relative flex flex-col gap-4 w-full h-full xl:px-16 md:px-8 p-4 pt-0 motion-preset-fade-md">
-      <Addevent Visible={addevent} Close={handleVisible}/>
+      <Addevent Visible={addevent} UID={user.uid} Close={handleVisible}/>
       <div className="grid lg:grid-cols-2 gap-6 w-full">
         <div className=" flex-1 flex flex-col gap-6">
 
@@ -53,7 +57,7 @@ const queries = Filter(Search);
               </div>
               <div className="flex flex-col">
                 <h4 className="text-sm poppins-bold text-myblack/70">Events</h4>
-                <span className="text-2xl poppins-extrabold text-gradient1">24</span>
+                <span className="text-2xl poppins-extrabold text-gradient1">{EventCount}</span>
               </div>
             </div>
 
@@ -63,7 +67,7 @@ const queries = Filter(Search);
               </div>
               <div className="flex flex-col">
                 <h4 className="text-sm poppins-bold text-myblack/70">Upcoming</h4>
-                <span className="text-2xl poppins-extrabold text-gradient1">24</span>
+                <span className="text-2xl poppins-extrabold text-gradient1">{UpcomingCount}</span>
               </div>
             </div>
 
@@ -73,7 +77,7 @@ const queries = Filter(Search);
               </div>
               <div className="flex flex-col">
                 <h4 className="text-sm poppins-bold text-myblack/70">Today</h4>
-                <span className="text-2xl poppins-extrabold text-gradient1">24</span>
+                <span className="text-2xl poppins-extrabold text-gradient1">{TodayCount}</span>
               </div>
             </div>
 

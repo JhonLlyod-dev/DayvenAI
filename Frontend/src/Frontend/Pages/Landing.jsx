@@ -4,22 +4,35 @@ import { ArrowRight } from 'lucide-react'
 
 import { Link } from 'react-router-dom';
 import { useNavigate} from "react-router-dom";
+import { useState } from 'react';
 
 import Authenticate from '../../Backend/Functions/Auth';
-
+import Notif from '../Components_small/Notif';
 export default function Landing(){
     const navigate = useNavigate();
+    const [success,setsuccess] = useState(false);
+    const [error,seterror] = useState(false);
 
   function Signin(){
     Authenticate().
     then((user) => {
-      navigate('/dashboard');
+      setsuccess(true);
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 3000);
     }).
-    catch((error) => console.error(error));
+    catch((error) => {
+      seterror(true);
+      setTimeout(() => {
+        seterror(false);
+      }, 3000);
+    });
   }
 
   return(
     <div className='poppins-medium p-4 md:px-15 text-myblack flex flex-col gap-20'>
+      {success && <Notif type={'success'} message={'Logged in successfully'}/>}
+      {error && <Notif type={'error'} message={'Login failed'}/>}
       <div className='flex justify-between items-center'>
         <div className="flex items-center gap-2 ">
           <img src={logo} className='w-8' alt="logo" />

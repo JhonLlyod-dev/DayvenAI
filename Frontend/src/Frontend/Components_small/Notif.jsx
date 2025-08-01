@@ -13,7 +13,7 @@ export default function Notif(prop){
   useEffect(() => {
     setTimeout(() => {
       sethide(true);
-    }, 4000);
+    }, 1900);
   }, []);
 
 

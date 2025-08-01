@@ -15,28 +15,40 @@ import { auth } from './Backend/Firebase/Api';
 
 import { useState,useEffect } from 'react'
 
+import { fetchEvents } from './Backend/Functions/EventsAction';
+
 function App() {
 
   const [user, setUser] = useState(null);
   const [Fetching,setFetching ] = useState(true);
+  const [MyEvents, setMyEvents] = useState([]);
 
-  useEffect(()=>{
-    const unsubscribe = onAuthStateChanged(auth,(user) => {
-            
-      if(user){
-        setUser(user);
-        setFetching(false);
-        return;
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      setUser(user);
+
+      // fetch events only if user exists
+      const data = await fetchEvents(user.uid);
+
+      if (!data.empty) {
+        setMyEvents(data);
+        console.log(data);
+      } else {
+        console.log("No events");
       }
-
+    } else {
       setUser(null);
-      setFetching(false)
-    } );
+      setFetching(false);
+    }
 
-    return () => unsubscribe();
-   },[]);
+    setFetching(false);
+  });
 
-   console.log('User:', user);
+  // cleanup on unmount
+  return () => unsubscribe();
+}, []);
+
 
    if(Fetching){
     return <Load/>;
@@ -49,10 +61,10 @@ function App() {
 
         <Route element={<Secured user={user}/>}>
           <Route element={<Routing user={user}/>}>
-            <Route path='/dashboard' element={<Dashboard/>}/>
+            <Route path='/dashboard' element={<Dashboard myEvent={MyEvents}/>}/>
             <Route path='/calendar' element={<Calendar/>}/>
             <Route path='/profile' element={<Profile user={user}/>}/>
-            <Route path='/events' element={<Events/>}/>
+            <Route path='/events' element={<Events user={user} myEvent={MyEvents}/>}/>
           </Route>
         </Route>
         

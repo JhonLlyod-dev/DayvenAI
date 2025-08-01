@@ -13,22 +13,40 @@ import {
 import { db } from "../../Backend/Firebase/Api";
 
 // Add event
-export default async function addEvent(Data) {
-  if (!Data) return false;
+export default async function addEvent(Title,Type,startDate,endDate,allday,Time,Priority,Note,setter,UID) {
+
+  const ID = uuidv4();
+
+  const Data = {
+    id: ID,
+    title: Title,
+    type: Type,
+    createdAt: serverTimestamp(),
+    start: startDate,
+    end: endDate,
+    allday: allday,
+    time: Time,
+    priority: Priority,
+    note: Note,
+    status: 'Scheduled',
+    activty:'Active',
+    addedBy: setter,
+    UID: UID
+  };
 
   try {
-    const ref = doc(db, "Events", uuidv4());
+    const ref = doc(db, "Events", ID);
     await setDoc(ref, Data);
-    console.log('✅ Event added successfully');
+
   } catch (error) {
     console.error('❌ Error adding event:', error);
   }
 }
 
 // Fetch events
-export const fetchEvents = async () => {
+export const fetchEvents = async (UID) => {
   try {
-    const q = query(collection(db, "Events"), orderBy('date', 'asc'));
+    const q = query(collection(db, "Events"), where('UID', '==', UID), orderBy('createdAt', 'asc'));
     const querySnapshot = await getDocs(q);
 
     if (!querySnapshot.empty) {
