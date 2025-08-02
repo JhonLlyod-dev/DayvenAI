@@ -23,11 +23,10 @@ function App() {
   const [user, setUser] = useState(null);
   const [Fetching,setFetching ] = useState(true);
   const [MyEvents, setMyEvents] = useState([]);
-
+ 
+  // Adjust to make the function run every X seconds to your liking
   setInterval(async () => {
-  
     await Checker(MyEvents);
-
   }, 15000);
 
 useEffect(() => {
@@ -62,7 +61,7 @@ useEffect(() => {
         <Route element={<Secured user={user}/>}>
           <Route element={<Routing user={user}/>}>
             <Route path='/dashboard' element={<Dashboard myEvent={MyEvents}/>}/>
-            <Route path='/calendar' element={<Calendar/>}/>
+            <Route path='/calendar' element={<Calendar myEvent={MyEvents}/>}/>
             <Route path='/profile' element={<Profile user={user}/>}/>
             <Route path='/events' element={<Events user={user} myEvent={MyEvents}/>}/>
           </Route>

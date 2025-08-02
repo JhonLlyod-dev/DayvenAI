@@ -38,7 +38,7 @@ export default function Dashboard({myEvent}) {
         <div className="flex flex-col gap-4 h-full">
           <div className="motion-preset-blur-up-lg motion-delay-100  bg-smoothWhite shadow-md border-t-3 border-gradient1 flex-1 rounded-xl  flex flex-col p-4 font-semibold">
             <h3 className="text-lg flex items-center gap-1 font-bold mb-2"><ChartNoAxesColumn className="text-gradient1 mr-1" size={20} strokeWidth={3} /> Weekly Scheduled Events</h3>
-            <Charts/>
+            <Charts events={myEvent}/>
           </div>
         </div>
 
@@ -64,7 +64,7 @@ export default function Dashboard({myEvent}) {
 
         {/*Mini Calendar */}
         <div className="motion-preset-blur-up-lg motion-delay-200 bg-smoothWhite shadow-md border-t-3 border-gradient1 rounded-xl flex-1 flex  p-4  min-h-[14rem] h-full">
-          <MiniCalendar/>
+          <MiniCalendar events={myEvent}/>
         </div>
 
       </div>

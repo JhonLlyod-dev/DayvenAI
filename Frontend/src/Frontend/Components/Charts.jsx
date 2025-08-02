@@ -5,20 +5,17 @@ import {
 
 import { Eventdata } from "../../Backend/Data/Data";
 
+import { useEffect, useState } from "react";
+import { formatToOverAll,formatToAnnually,formatToWeekly } from "../../Backend/Functions/TimeFilter";
 
 
-const weeklyEventsData = [
-  { name: "Sun", events: 2 },
-  { name: "Mon", events: 5 },
-  { name: "Tue", events: 3 },
-  { name: "Wed", events: 6 },
-  { name: "Thu", events: 2 },
-  { name: "Fri", events: 4 },
-  { name: "Sat", events: 1 },
-];
 
-export default function Charts(){
 
+export default function Charts({events}){
+  
+  const weekly = formatToWeekly(events);
+
+  console.log(weekly);
   const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload?.length) return null;
 
@@ -37,7 +34,7 @@ export default function Charts(){
   return(
     <div className='h-70 flex w-full p-4 rounded-lg'>
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={weeklyEventsData}>
+        <BarChart data={weekly}>
           <CartesianGrid  vertical={false} stroke={"#9ca3af"} strokeWidth={.1}/>
           <Tooltip content={CustomTooltip}  cursor={false} />
           <XAxis padding={{ left: 20, right: 20 }} orientation="bottom" dataKey="name" stroke={'#151B31'}  tickLine={false} strokeWidth={0}  interval={0} />
@@ -48,8 +45,9 @@ export default function Charts(){
   );
 }
 
-export function EventChart(){
+export function EventChart({events}){
 
+  const Annual = formatToAnnually(events);
   const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload?.length) return null;
 
@@ -74,7 +72,7 @@ export function EventChart(){
   return(
     <div className="h-30 flex w-full rounded-lg poppins-semibold text-sm">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={Eventdata}>
+        <LineChart data={Annual}>
           <CartesianGrid vertical={false} stroke="#9ca3af" strokeWidth={0.1} />
           <XAxis
             padding={{ left: 20, right: 20 }}
@@ -109,10 +107,13 @@ export function EventChart(){
 }
 
 
-export const EventPieChart = () => {
-  const userTotal = Eventdata.reduce((sum, item) => sum + item.user, 0);
-  const aiTotal = Eventdata.reduce((sum, item) => sum + item.ai, 0);
-  const total = userTotal + aiTotal;
+export const EventPieChart = ({event}) => {
+
+  const MyEvent = formatToOverAll(event);
+
+  const userTotal = MyEvent.user;
+  const aiTotal = MyEvent.ai;
+  const total = MyEvent.total;
 
   const pieData = [
     { name: "User", value: userTotal },

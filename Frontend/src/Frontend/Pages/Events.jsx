@@ -94,13 +94,13 @@ const queries = Filter(Search);
 
           <div className="border-l-3 border-l-gradient1 bg-smoothWhite rounded-lg flex flex-col gap-2 shadow-md border border-gray-200 w-full p-4 md:p-8 ">
             <h1 className="poppins-bold">Annual Event Summary</h1>
-            <EventChart/>
+            <EventChart events={myEvent}/>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4 flex-1">
             <div className="border-t-3 border-t-gradient1 bg-smoothWhite rounded-lg flex flex-col shadow-md border border-gray-200 w-full p-4 ">
               <h1 className="poppins-bold">Event Source Summary</h1>
-              <EventPieChart/>
+              <EventPieChart event={myEvent}/>
               <p className="poppins-semibold w-full text-center text-sm">Events created by you and Dayven</p>
             </div>
 

@@ -4,8 +4,12 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import multiMonthPlugin from '@fullcalendar/multimonth'
 
-export const MiniCalendar = () => {
 
+import EventsFilter from '../../Backend/Functions/CalFilter';
+
+export const MiniCalendar = ({events}) => {
+
+  const Myevents = EventsFilter({events});
   return(
     <div className="
       bg-smoothWhite poppins-extrabold  text-xs text-myblack rounded-xl  w-full" >
@@ -18,16 +22,8 @@ export const MiniCalendar = () => {
           end: 'prev,next',
         }}
 
-        editable={true}
         selectable={true}
-        events={[
-          { title: 'Meeting', date: '2025-07-23' },
-          { title: 'Project Demo', date: '2025-07-24' },
-          { title: 'Project Demo', date: '2025-07-24' },
-          { title: 'Project Demo', date: '2025-07-24' },
-          { title: 'Project Demo', date: '2025-07-24' },
-          { title: 'Project Demo', date: '2025-07-24' },
-        ]}
+        events={Myevents}
          height={300}
          dayMaxEvents={1}
       />
@@ -36,7 +32,9 @@ export const MiniCalendar = () => {
 };
 
 
-export const BigCalendar = () => {
+export const BigCalendar = ({events}) => {
+  
+    const Myevents = EventsFilter({events});
   return (
     <div className=" motion-preset-fade-lg motion-delay-100 flex-1 h-full bg-smoothWhite poppins-extrabold text-sm text-myblack rounded-xl w-full">
       <FullCalendar
@@ -52,12 +50,7 @@ export const BigCalendar = () => {
           center: 'multiMonthYear,dayGridMonth',
           end: 'today prev,next',
         }}
-        events={[
-          { title: 'Meeting', date: '2025-07-23' },
-          { title: 'Project Demo', date: '2025-07-24' },
-          { title: 'Project Demo', date: '2025-07-24' },
-          { title: 'Project Demo', date: '2025-07-24' },
-        ]}
+        events={Myevents}
         height="100%"
         dayMaxEvents={2} // Full available height
       />

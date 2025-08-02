@@ -1,10 +1,10 @@
 import { BigCalendar } from "../Components/Calendar";
 
-export default function Calendar(){
+export default function Calendar({myEvent}){
 
   return(
     <div className="flex h-full flex-col items-center w-full px-20 pb-10">
-          <BigCalendar/>
+          <BigCalendar events={myEvent}/>
 
     </div>
   );

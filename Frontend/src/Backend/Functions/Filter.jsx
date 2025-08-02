@@ -23,6 +23,8 @@ export default async function Checker(events) {
       return;
     } else if (now.isAfter(end)) {
       newStatus = 'Missed';
+    } else if(now.isAfter(start) && start === end) {
+      newStatus = 'Missed';
     } else if (now.isAfter(start) && now.isBefore(end)) {
       newStatus = 'Ongoing';
     }
