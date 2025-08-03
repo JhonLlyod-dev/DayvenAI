@@ -52,7 +52,7 @@ export default function Addevent({Visible,Close,UID}) {
     }
     
     let Time = {};
-    if (allday === 'true') {
+    if (allday === 'true' || allday === true) {
       Time = { allDay: true };
     } else {
       Time = { start: startTime, end: endTime };
@@ -175,7 +175,7 @@ export default function Addevent({Visible,Close,UID}) {
           <button disabled={Loading} onClick={add} className="bg-gradient1 self-center anim  text-xs rounded-md text-smoothWhite poppins-semibold p-2 px-4 w-fit flex-center gap-2">
             
             {!Loading ? <>Add <Plus size={15} strokeWidth={3}/> </>: <MiniLoad/>}
-            </button>
+          </button>
 
       </div>
     </div>

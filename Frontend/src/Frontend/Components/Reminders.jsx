@@ -19,18 +19,29 @@ export default function Reminder({data}){
     }
 
   const statusStyles = {
-    "Ongoing": "text-green-500 ", // Change to ongoing
-    "Scheduled": "text-gradient1 ",
-    "Missed": "text-red-500 ",
-  };
-  const statusBG = {
-    "Ongoing": "bg-green-500 ",
-    "Scheduled": "bg-gradient1 ",
-    "Missed": "bg-red-500 ",
+    "Ongoing": "text-amber-500",     // In progress
+    "Scheduled": "text-gradient1",   // Upcoming
+    "Missed": "text-red-500",        // Not done
+    "Completed": "text-green-500",   // Successfully finished
   };
 
+  const statusBG = {
+    "Ongoing": "bg-amber-500",
+    "Scheduled": "bg-gradient1",
+    "Missed": "bg-red-500",
+    "Completed": "bg-green-500",
+  };
+
+  const statusBorder = {
+    "Ongoing": "border-l-amber-500",
+    "Scheduled": "border-l-gradient1",
+    "Missed": "border-l-red-500",
+    "Completed": "border-l-green-500",
+  }
+
+  
   return(
-    <div  className="flex items-center justify-between bg-white rounded-lg shadow-sm px-4 py-3 border-l-3 border-l-gradient1 border border-gray-200 w-full">
+    <div  className={`flex items-center justify-between bg-smoothWhite rounded-lg shadow-sm px-4 py-3 border-l-3 ${statusBorder[data.status]} border border-gray-200 w-full`}>
       {/* Icon + Content */}
       <div className="flex-center gap-3 w-full min-w-0">
         {/* Type Icon */}
@@ -38,7 +49,7 @@ export default function Reminder({data}){
 
         {/* Main Content */}
         <div className="flex flex-col w-full min-w-0">
-          <h4 className="poppins-semibold text-sm text-myblack">{data.title}</h4>
+          <h4 className={`poppins-semibold text-sm ${statusStyles[data.status]}`}>{data.title}</h4>
           <p className="text-sm font-medium text-gray-500 truncate">{data.note}</p>
         </div>
       </div>

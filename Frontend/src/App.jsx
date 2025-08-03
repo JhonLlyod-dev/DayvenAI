@@ -25,9 +25,15 @@ function App() {
   const [MyEvents, setMyEvents] = useState([]);
  
   // Adjust to make the function run every X seconds to your liking
-  setInterval(async () => {
-    await Checker(MyEvents);
+useEffect(() => {
+  const interval = setInterval(() => {
+    if (MyEvents && MyEvents.length > 0) {
+      Checker(MyEvents);
+    }
   }, 15000);
+
+  return () => clearInterval(interval); // cleanup when component unmounts
+}, [MyEvents]);
 
 useEffect(() => {
   const unsubscribe = onAuthStateChanged(auth, async (user) => {

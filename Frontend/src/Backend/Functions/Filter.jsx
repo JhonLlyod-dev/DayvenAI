@@ -7,38 +7,47 @@ import { UpdateEvent } from "./EventsAction";
 export default async function Checker(events) {
   const now = dayjs();
 
-  events.map( async (event) => {
+  for (const event of events) {// ✅ Skip this event
+
+    if(!event.id || !event.status) continue;
+
+    const status = event.status?.trim().toLowerCase();
+
+    if (status === 'completed') {
+      console.log(`✅ Skipping completed event ID: ${event.id}`);
+      continue;
+    }
+
+
     let newStatus = '';
     let start, end;
 
-    if (event.allday) {
-      start = dayjs(event.start);
-      end = dayjs(event.end);
+    if (event.allday === true || event.allday === 'true') {
+      start = dayjs(event.start).startOf('day');
+      end = dayjs(event.end).endOf('day'); // 👈 Extend to end of the day
     } else {
       start = dayjs(`${event.start} ${event.time.start}`, 'YYYY-MM-DD HH:mm');
       end = dayjs(`${event.end} ${event.time.end}`, 'YYYY-MM-DD HH:mm');
     }
 
-    if (now.isBefore(start)){
-      return;
+    console.log(`Event title: ${event.title}, Start: ${start}, End: ${end}`);
+
+    if (now.isBefore(start)) {
+      continue;
     } else if (now.isAfter(end)) {
-      newStatus = 'Missed';
-    } else if(now.isAfter(start) && start === end) {
       newStatus = 'Missed';
     } else if (now.isAfter(start) && now.isBefore(end) || now.isSame(start)) {
       newStatus = 'Ongoing';
     }
 
-    
-    // Only update if status has changed
     if (event.status !== newStatus) {
       try {
         await UpdateEvent(event.id, newStatus);
       } catch (error) {
         console.error('❌ Error updating event:', error);
       }
-    }  else {
+    } else {
       console.log('Event status has not changed');
     }
-  });
+  }
 }

@@ -114,3 +114,4 @@ export function formatToWeekly(Events) {
 
   return weeklyEventsData;
 }
+

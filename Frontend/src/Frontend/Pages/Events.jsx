@@ -20,29 +20,40 @@ export default function Events({user,myEvent}){
   }, [myEvent]);
   const [Search, setSearch] = useState('');
   const [Order, setOrder] = useState('');
+  const [Prio, setPrio] = useState('');
   const [FindDate, setFindDate] = useState('');
   const [addevent,setAddevent] = useState(false);
 
 const Filter = (Search) => {
-  if (Search.trim()) {
-    const lowered = Search.toLowerCase();
+  let filtered = Events;
 
-    return Events.filter((item) =>
+  if (Search?.trim()) {
+    const lowered = Search.toLowerCase();
+    filtered = filtered.filter((item) =>
       item.title.toLowerCase().includes(lowered) ||
       item.type.toLowerCase().includes(lowered)
     );
   }
 
-  if  (Order) {
-    if(Order === 'All') return Events;
-    return Events.filter((item) => item.status === Order);
-  }
-  if(FindDate){
-    return Events.filter((item) => dayjs(item.start).isSame(FindDate,'day') || dayjs(item.end).isSame(FindDate,'day') || dayjs(item.start).isBefore(FindDate,'day') && dayjs(item.end).isAfter(FindDate,'day'));
+  if (Order && Order !== 'All') {
+    filtered = filtered.filter((item) => item.status === Order);
   }
 
-  return Events;
+  if (FindDate) {
+    filtered = filtered.filter((item) =>
+      dayjs(item.start).isSame(FindDate, 'day') ||
+      dayjs(item.end).isSame(FindDate, 'day') ||
+      (dayjs(item.start).isBefore(FindDate, 'day') && dayjs(item.end).isAfter(FindDate, 'day'))
+    );
+  }
+
+  if (Prio && Prio !== 'All') {
+    filtered = filtered.filter((item) => item.priority === Prio);
+  }
+
+  return filtered;
 };
+
 
 const EventCount = Events.filter((item) => item.activty === 'Active').length;
 const UpcomingCount = Events.filter((item) => dayjs(item.start).isAfter(dayjs(), 'day')).length;
@@ -114,7 +125,7 @@ const queries = Filter(Search);
             </div>
 
             <div className="border-t-3 border-t-gradient1 bg-smoothWhite rounded-lg flex flex-col gap-2 shadow-md border border-gray-200 w-full p-4  ">
-              <MiniCalendar/>
+              <MiniCalendar events={myEvent}/>
             </div>
           </div>
 
@@ -125,14 +136,30 @@ const queries = Filter(Search);
             <h1 className="poppins-bold">Scheduled</h1>
             <button onClick={()=> setAddevent(true)} className="anim bg-gradient1 text-xs rounded-md text-smoothWhite poppins-semibold p-2 px-4 w-fit flex-center gap-2">Create Event <Plus size={15} strokeWidth={3}/></button>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-2">
             <div className=" flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full p-2 px-4">
-              <input type="text" value={Search} onChange={(e)=> setSearch(e.target.value)} className="w-full  outline-0 text-sm font-medium" />
+              <input type="text" value={Search} placeholder="Search Events" onChange={(e)=> setSearch(e.target.value)} className="w-full  outline-0 text-sm font-medium" />
               <See size={18} strokeWidth={2}/>
             </div>
 
             <div className="flex-1/2 flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full   items-center">
               <input value={FindDate} onChange={(e)=> setFindDate(e.target.value)} type="date" className="appearance-none bg-transparent text-sm font-medium p-2 px-4 outline-none w-full" />
+            </div>
+
+            <div className="flex-1/2 flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full pr-4   items-center">
+              <select
+                value={Prio}
+                onChange={(e)=> setPrio(e.target.value)}
+                className="appearance-none bg-transparent text-sm font-medium p-2 px-4 outline-none w-full"
+                name=""
+                id=""
+              >
+                <option value="All" className="font-medium ">All</option>
+                <option value="High" className="font-medium ">High</option>
+                <option value="Medium" className="font-medium">Medium</option>
+                <option value="Low" className="font-medium">Low</option>
+              </select>
+              <Funnel size={18} strokeWidth={2} />
             </div>
 
             <div className="flex-1/2 flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full pr-4   items-center">
@@ -147,6 +174,7 @@ const queries = Filter(Search);
                 <option value="Ongoing" className="font-medium ">Ongoing</option>
                 <option value="Scheduled" className="font-medium">Scheduled</option>
                 <option value="Missed" className="font-medium">Missed</option>
+                <option value="Completed" className="font-medium">Completed</option>
               </select>
               <Funnel size={18} strokeWidth={2} />
             </div>

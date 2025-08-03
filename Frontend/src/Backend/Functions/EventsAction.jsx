@@ -5,7 +5,7 @@ import {
   serverTimestamp,
   onSnapshot,
   collection,
-  getDocs,
+  deleteDoc,
   updateDoc,
   orderBy,
   query,
@@ -67,18 +67,34 @@ export async function fetchEvents(userUID, callback) {
 
 
 export async function UpdateEvent(id,status){
-  console.log('Updating event with ID:', id);
 
   const docRef = doc(db, "Events", id);
   try {
     if(status === 'Missed'){
       await updateDoc(docRef, { status: status, activty:'Inactive' });
-      console.log(`Event status updated to ${status}`);
       return;
     }
-
     await updateDoc(docRef, { status: status });
-    console.log(`Event status updated to ${status}`);
+  } catch (error) {
+    console.error('❌ Error updating event:', error);
+  }
+}
+
+export async function DeleteEvent(id) {
+  try {
+    const docRef = doc(db, "Events", id);
+    await deleteDoc(docRef);
+    console.log("Event deleted successfully");
+  } catch (error) {
+    console.error("Error deleting event:", error);
+  }
+}
+
+export async function UpdateEventData(data,id){
+
+  const docRef = doc(db, "Events", id);
+  try {
+      await updateDoc(docRef, data);
   } catch (error) {
     console.error('❌ Error updating event:', error);
   }
