@@ -46,7 +46,7 @@ export default function Landing(){
             <li>Contact Us</li>
           </ul>
 
-          <button onClick={Signin} className='gradient-bg btn'>
+          <button onClick={Signin} className='gradient-bg btn anim'>
             Sign In
           </button>
         </div>
@@ -61,7 +61,7 @@ export default function Landing(){
           <p className='text-sm sm:text-base md:text-lg lg:text-xl text-myblack/60'>
             DayvenAI is a smart scheduling assistant that helps you organize your day, manage events, and generate optimal plans using AI based on your availability and priorities.
           </p>
-            <button  onClick={Signin} className='gradient-bg btn flex items-center gap-2'>
+            <button  onClick={Signin} className='gradient-bg btn flex items-center gap-2 anim'>
               Get Started <ArrowRight size={20} />
             </button>
         </div>

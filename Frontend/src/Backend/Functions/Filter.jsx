@@ -25,7 +25,7 @@ export default async function Checker(events) {
       newStatus = 'Missed';
     } else if(now.isAfter(start) && start === end) {
       newStatus = 'Missed';
-    } else if (now.isAfter(start) && now.isBefore(end)) {
+    } else if (now.isAfter(start) && now.isBefore(end) || now.isSame(start)) {
       newStatus = 'Ongoing';
     }
 

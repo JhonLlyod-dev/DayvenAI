@@ -20,6 +20,7 @@ export default function Events({user,myEvent}){
   }, [myEvent]);
   const [Search, setSearch] = useState('');
   const [Order, setOrder] = useState('');
+  const [FindDate, setFindDate] = useState('');
   const [addevent,setAddevent] = useState(false);
 
 const Filter = (Search) => {
@@ -30,6 +31,14 @@ const Filter = (Search) => {
       item.title.toLowerCase().includes(lowered) ||
       item.type.toLowerCase().includes(lowered)
     );
+  }
+
+  if  (Order) {
+    if(Order === 'All') return Events;
+    return Events.filter((item) => item.status === Order);
+  }
+  if(FindDate){
+    return Events.filter((item) => dayjs(item.start).isSame(FindDate,'day') || dayjs(item.end).isSame(FindDate,'day') || dayjs(item.start).isBefore(FindDate,'day') && dayjs(item.end).isAfter(FindDate,'day'));
   }
 
   return Events;
@@ -122,25 +131,19 @@ const queries = Filter(Search);
               <See size={18} strokeWidth={2}/>
             </div>
 
+            <div className="flex-1/2 flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full   items-center">
+              <input value={FindDate} onChange={(e)=> setFindDate(e.target.value)} type="date" className="appearance-none bg-transparent text-sm font-medium p-2 px-4 outline-none w-full" />
+            </div>
+
             <div className="flex-1/2 flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full pr-4   items-center">
               <select
+                value={Order}
+                onChange={(e)=> setOrder(e.target.value)}
                 className="appearance-none bg-transparent text-sm font-medium p-2 px-4 outline-none w-full"
                 name=""
                 id=""
               >
                 <option value="All" className="font-medium ">All</option>
-                <option value="New" className="font-medium">New</option>
-                <option value="Old" className="font-medium">Old</option>
-              </select>
-              <Funnel size={18} strokeWidth={2}  />
-            </div>
-
-            <div className="flex-1/2 flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full pr-4   items-center">
-              <select
-                className="appearance-none bg-transparent text-sm font-medium p-2 px-4 outline-none w-full"
-                name=""
-                id=""
-              >
                 <option value="Ongoing" className="font-medium ">Ongoing</option>
                 <option value="Scheduled" className="font-medium">Scheduled</option>
                 <option value="Missed" className="font-medium">Missed</option>
@@ -153,6 +156,9 @@ const queries = Filter(Search);
             {queries.map((data,i)=>(
               <EventsData key={i} data={data}/>
             ))}
+
+            {queries.length === 0 && <p className="motion-preset-blur-up-lg motion-delay-100 mt-30 text-myblack/70 poppins-semibold text-center w-full">No events found</p>}
+            
           </div>
 
         </div>
