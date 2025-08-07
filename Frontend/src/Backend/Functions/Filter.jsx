@@ -14,7 +14,6 @@ export default async function Checker(events) {
     const status = event.status?.trim().toLowerCase();
 
     if (status === 'completed') {
-      console.log(`✅ Skipping completed event ID: ${event.id}`);
       continue;
     }
 
@@ -30,8 +29,6 @@ export default async function Checker(events) {
       end = dayjs(`${event.end} ${event.time.end}`, 'YYYY-MM-DD HH:mm');
     }
 
-    console.log(`Event title: ${event.title}, Start: ${start}, End: ${end}`);
-
     if (now.isBefore(start)) {
       continue;
     } else if (now.isAfter(end)) {
@@ -46,8 +43,6 @@ export default async function Checker(events) {
       } catch (error) {
         console.error('❌ Error updating event:', error);
       }
-    } else {
-      console.log('Event status has not changed');
     }
   }
 }

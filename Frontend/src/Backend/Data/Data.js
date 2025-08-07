@@ -230,7 +230,7 @@ export const weekAvailability = [
   ];
 
 
-export const conversation = [
+export const conversation2 = [
   {
     username: "Jhon",
     type: "User",

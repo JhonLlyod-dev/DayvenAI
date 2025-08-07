@@ -53,7 +53,6 @@ export default function EventsFilter({events}){
     eventsFiltered.push(event);
   });
 
-  console.log(eventsFiltered);
 
   return eventsFiltered
   

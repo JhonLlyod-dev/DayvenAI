@@ -1,37 +1,51 @@
-import { functions } from "firebase-functions";
-import ModelClient from "@azure-rest/ai-inference";
-import { isUnexpected } from "@azure-rest/ai-inference";
+// index.js
+import { onRequest } from "firebase-functions/v2/https";
+import { defineSecret } from "firebase-functions/params";
+import ModelClient, { isUnexpected } from "@azure-rest/ai-inference";
 import { AzureKeyCredential } from "@azure/core-auth";
-import { DAYVEN_SYSTEM_PROMPT } from "./SystemPrompt";
+import { SimplePrompt } from "./SystemPrompt.js";
+import cors from "cors";
 
+// Define your secret (ensure it's added via Firebase CLI or Console)
+const api_key = defineSecret("DAYVEN_API_KEY");
+
+// Define model + endpoint
 const endpoint = "https://models.github.ai/inference";
 const model = "openai/gpt-4.1";
 
-exports.queryAI = functions.https.onRequest(async (req, res) => {
-  const token = functions.config().dayven_ai.api_key;
+// CORS config
+const corsHandler = cors({ origin: true });
 
-  try {
-    const client = ModelClient(endpoint, new AzureKeyCredential(token));
+// Cloud Function
+export const queryAI = onRequest({ secrets: [api_key] }, (req, res) => {
+  corsHandler(req, res, async () => {
+    try {
+      const token = api_key.value();
 
-    const response = await client.path("/chat/completions").post({
-      body: {
-        messages: [
-          { role: "system", content: DAYVEN_SYSTEM_PROMPT },
-          { role: "user", content: req.body.prompt || "Hello!" }
-        ],
-        temperature: 1,
-        top_p: 1,
-        model: model
+      const client = ModelClient(endpoint, new AzureKeyCredential(token));
+
+      const response = await client.path("/chat/completions").post({
+        body: {
+          messages: [
+            { role: "system", content: SimplePrompt },
+            { role: "user", content: req.body.prompt },
+          ],
+          model,
+        },
+      });
+
+      if (isUnexpected(response)) {
+        return res
+          .status(500)
+          .json({ error: response.body?.error || "Unexpected error from Azure" });
       }
-    });
 
-    if (isUnexpected(response)) {
-      throw response.body.error;
+      return res
+        .status(200)
+        .json({ response: response.body.choices[0].message.content });
+    } catch (error) {
+      console.error("Azure API error:", error);
+      return res.status(500).json({ error: "Azure API error: Unexpected error from Azure" });
     }
-
-    res.json({ reply: response.body.choices[0].message.content });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch response from model." });
-  }
+  });
 });

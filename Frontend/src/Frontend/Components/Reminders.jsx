@@ -1,4 +1,4 @@
-import { Clock } from "lucide-react";
+import { Clock,ClockAlert} from "lucide-react";
 import { setTime } from "../../Backend/Functions/TimeFilter";
 
 export default function Reminder({data}){
@@ -21,21 +21,21 @@ export default function Reminder({data}){
   const statusStyles = {
     "Ongoing": "text-amber-500",     // In progress
     "Scheduled": "text-gradient1",   // Upcoming
-    "Missed": "text-red-500",        // Not done
+    "Missed": "text-red-600",        // Not done
     "Completed": "text-green-500",   // Successfully finished
   };
 
   const statusBG = {
     "Ongoing": "bg-amber-500",
     "Scheduled": "bg-gradient1",
-    "Missed": "bg-red-500",
+    "Missed": "bg-red-600",
     "Completed": "bg-green-500",
   };
 
   const statusBorder = {
     "Ongoing": "border-l-amber-500",
     "Scheduled": "border-l-gradient1",
-    "Missed": "border-l-red-500",
+    "Missed": "border-l-red-600",
     "Completed": "border-l-green-500",
   }
 
@@ -45,7 +45,7 @@ export default function Reminder({data}){
       {/* Icon + Content */}
       <div className="flex-center gap-3 w-full min-w-0">
         {/* Type Icon */}
-        <Clock className={`${statusStyles[data.status]}`} />
+        {data.status === 'Missed' ? <ClockAlert className={`${statusStyles[data.status]}`}  strokeWidth={2.5} /> : <Clock className={`${statusStyles[data.status]}`} /> }
 
         {/* Main Content */}
         <div className="flex flex-col w-full min-w-0">
@@ -57,6 +57,7 @@ export default function Reminder({data}){
       {/* Time + Status */}
       <div className="flex flex-col items-end text-right text-xs font-semibold text-gray-600 whitespace-nowrap ml-4">
         <span className="font-bold">{Time()}</span>
+
         <span className={`${statusStyles[data.status]} mt-1 flex items-center gap-1`}>
           <span className={`inline-block w-2 h-2 ${statusBG[data.status]} rounded-full`}></span>
             {data.status}

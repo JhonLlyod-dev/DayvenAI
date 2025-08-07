@@ -15,7 +15,6 @@ export default function Charts({events}){
   
   const weekly = formatToWeekly(events);
 
-  console.log(weekly);
   const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload?.length) return null;
 
