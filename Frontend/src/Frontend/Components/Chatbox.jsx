@@ -1,4 +1,4 @@
-import { SendHorizontal,Bot,User } from "lucide-react";
+import { SendHorizontal,Bot,User,Clock } from "lucide-react";
 import { useState,useEffect,useRef } from "react";
 import ReactMarkdown from 'react-markdown';
 
@@ -14,33 +14,42 @@ export default function Chatbox(){
   const [conversation, setConversation] = useState([
     {
       type:'AI',
-      message:'👋 Hello! Let’s take control of your time today.'
+      message: {
+        response: '👋 Hello! Let’s take control of your time today.',
+      }
     }
   ]);
    async function ask(prompt){
 
     const usermsg = {
       type:'USER',
-      message:prompt
+      message: {
+        response: prompt
+      }
     }
     const updatedMessages = [...conversation,usermsg];
 
     const memory = updatedMessages.map((message) => `${message.type}: ${message.message}`).join('\n');
 
-    setConversation([...updatedMessages,{ type: 'AI', message: '...' }]);
+    setConversation([...updatedMessages,{ type: 'AI', message: { response: '...'} }]);
 
     setPrompt('');
 
-    let AI_response = '';
+    let AI_response = {};
 
     try {
      const response = await main(prompt,memory);
 
-     AI_response = response;
+     try {
+      const parsedResponse = JSON.parse(response);
+      AI_response = parsedResponse;
+     } catch (error) {
+      console.error('Error parsing response:', error);
+     }
 
      setConversation([...updatedMessages, { type: 'AI', message: AI_response }]);
     } catch (error) {
-      setConversation([...updatedMessages, { type: 'AI', message: '⚠️ An error occurred while processing your request.' }]);
+      setConversation([...updatedMessages, { type: 'AI', message: { response: error.message } }]);
     }
 
   }
@@ -76,7 +85,7 @@ export default function Chatbox(){
               { data.message === '...' ?
                 <p className="text-sm border border-gray-200 p-1 px-2 rounded-lg shadow-md max-w-[50%]"><Waiting/></p>
                   : 
-                <ChatData message={data.message} />
+                <ChatData data={data} />
               }
             </div>
           ))
@@ -97,7 +106,8 @@ export default function Chatbox(){
 }
 
 
-function ChatData({message}){
+function ChatData({data}){
+
 
   return(
     <div className="bg-white rounded-lg p-3 max-w-[90%] md:max-w-[75%] shadow-sm border border-gray-200">
@@ -132,10 +142,41 @@ function ChatData({message}){
           ),
         }}
       >
-        {message}
+        {data.message.response}
       </ReactMarkdown>
+      { data.type === 'AI' && data.message.event && <EventModal data={data.message.event}/>}
+        
     </div>
 
   );
+}
+
+function EventModal({data}){
+
+  return(
+      <div className="mt-6 flex flex-col bg-smoothWhite shadow-sm border border-gray-200 rounded-lg border-l-3 text-sm border-l-gradient1 p-2 px-4">
+        <div className="flex justify-between items-center mb-1">
+          <h3 className="font-semibold">Quiz Comprog</h3>
+          <span className="text-xs font-semibold">High</span>
+        </div>
+
+        <span className="text-xs text-gray-500 poppins-semibold">
+          Aug 12, 2025
+        </span>
+
+        <span className="text-xs text-gray-500 flex items-center gap-1 poppins-semibold">
+          <Clock size={15} strokeWidth={2.5} /> All day
+        </span>
+
+        <span className="mt-1 px-2 py-0.5 poppins-semibold bg-blue-100 text-blue-600 rounded text-xs w-fit">
+          Assignment
+        </span>
+        <span className="mt-2 text-xs text-gray-500 flex items-center gap-1 poppins-semibold">
+          Hi there kupal
+        </span>
+
+        <button className="mt-5 self-center anim bg-gradient1 text-xs rounded-md text-smoothWhite poppins-semibold p-2 px-6 w-fit flex-center gap-2">Add</button>
+      </div>
+  )
 }
 
