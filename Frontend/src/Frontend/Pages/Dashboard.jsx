@@ -13,7 +13,7 @@ import { reminders} from '../../Backend/Data/Data.js';
  
 import { BellRing,Pin, ChevronRight,Bot,ChartNoAxesColumn } from "lucide-react";
 
-export default function Dashboard({myEvent}) {
+export default function Dashboard({user,myEvent}) {
 
   const [Events, setEvents] = useState([]);
 
@@ -109,7 +109,7 @@ export default function Dashboard({myEvent}) {
           </div>
 
           <div className="flex-1">
-            <Chatbox/>
+            <Chatbox user={user.uid}/>
           </div>
         </div>
       </div>

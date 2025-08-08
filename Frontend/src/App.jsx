@@ -66,7 +66,7 @@ useEffect(() => {
 
         <Route element={<Secured user={user}/>}>
           <Route element={<Routing user={user}/>}>
-            <Route path='/dashboard' element={<Dashboard myEvent={MyEvents}/>}/>
+            <Route path='/dashboard' element={<Dashboard user={user} myEvent={MyEvents}/>}/>
             <Route path='/calendar' element={<Calendar myEvent={MyEvents}/>}/>
             <Route path='/profile' element={<Profile user={user}/>}/>
             <Route path='/events' element={<Events user={user} myEvent={MyEvents}/>}/>

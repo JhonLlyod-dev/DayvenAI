@@ -1,13 +1,15 @@
 import { SendHorizontal,Bot,User,Clock } from "lucide-react";
 import { useState,useEffect,useRef } from "react";
 import ReactMarkdown from 'react-markdown';
+import dayjs from "dayjs";
+import { setTime } from "../../Backend/Functions/TimeFilter";
 
-import { conversation2 } from "../../Backend/Data/Data";
-import AskAI from "../../Backend/Functions/api";
 import { main } from "../../Backend/API/AI";
 import Waiting from "../Components_small/waiting";
 
-export default function Chatbox(){
+import addEvent from "../../Backend/Functions/EventsAction";
+
+export default function Chatbox({user}){
 
   const [Prompt,setPrompt] = useState('');
 
@@ -15,7 +17,7 @@ export default function Chatbox(){
     {
       type:'AI',
       message: {
-        response: '👋 Hello! Let’s take control of your time today.',
+        "response": "**👋 Hello!**  \n_I’m **Dayven**, your intelligent scheduling assistant._  \n**How can I help you maximize your productivity today?**  \n✨ *Let’s organize your time, your way!*"
       }
     }
   ]);
@@ -82,10 +84,10 @@ export default function Chatbox(){
               <div className="h-8 w-8 flex-center rounded-full bg-gradient1">
                 {data.type === 'AI' ? <Bot size={20} className="text-white"/>: <User size={20} className="text-white"/> }
               </div>
-              { data.message === '...' ?
+              { data.message.response === '...' ?
                 <p className="text-sm border border-gray-200 p-1 px-2 rounded-lg shadow-md max-w-[50%]"><Waiting/></p>
                   : 
-                <ChatData data={data} />
+                <ChatData data={data} user={user} />
               }
             </div>
           ))
@@ -106,7 +108,7 @@ export default function Chatbox(){
 }
 
 
-function ChatData({data}){
+function ChatData({user,data}){
 
 
   return(
@@ -144,38 +146,65 @@ function ChatData({data}){
       >
         {data.message.response}
       </ReactMarkdown>
-      { data.type === 'AI' && data.message.event && <EventModal data={data.message.event}/>}
+      { data.type === 'AI' && data.message.event && <EventModal user={user} data={data.message.event}/>}
         
     </div>
 
   );
 }
 
-function EventModal({data}){
+function EventModal({user,data}){
+
+  const Time = ()=>{
+
+    let Time = '';
+
+    if(data.time.allDay === true){
+      Time = 'All day';
+    } else if(data.time.start === data.time.end){
+      Time = setTime(data.time.start);
+    } else {
+      Time = `${setTime(data.time.start)} - ${setTime(data.time.end)}`;
+    }
+
+
+    return Time;
+  }
+
+  async function add(){
+
+    try {
+      await addEvent(data.title,data.type,data.start,data.end,data.allday,data.time,'High',data.note,'AI',user);
+      alert('Event added');
+    } catch (error) {
+      alert(error);
+      console.error('❌ Error adding event:', error);
+    }
+  }
 
   return(
       <div className="mt-6 flex flex-col bg-smoothWhite shadow-sm border border-gray-200 rounded-lg border-l-3 text-sm border-l-gradient1 p-2 px-4">
         <div className="flex justify-between items-center mb-1">
-          <h3 className="font-semibold">Quiz Comprog</h3>
-          <span className="text-xs font-semibold">High</span>
+          <h3 className="font-semibold">{data.title}</h3>
+          <span className="text-xs font-semibold">{data.priority}</span>
         </div>
 
         <span className="text-xs text-gray-500 poppins-semibold">
-          Aug 12, 2025
+          {data.end ? dayjs(data.start).format(' MMM D, YYYY') + ' - ' + dayjs(data.end).format(' MMM D, YYYY') : dayjs(data.start).format(' MMM D, YYYY') }
         </span>
 
         <span className="text-xs text-gray-500 flex items-center gap-1 poppins-semibold">
-          <Clock size={15} strokeWidth={2.5} /> All day
+          <Clock size={15} strokeWidth={2.5} /> {data.time.allDay === true ? 'All day' : Time()}
         </span>
 
         <span className="mt-1 px-2 py-0.5 poppins-semibold bg-blue-100 text-blue-600 rounded text-xs w-fit">
-          Assignment
+          {data.type}
         </span>
         <span className="mt-2 text-xs text-gray-500 flex items-center gap-1 poppins-semibold">
-          Hi there kupal
+          {data.note}
         </span>
 
-        <button className="mt-5 self-center anim bg-gradient1 text-xs rounded-md text-smoothWhite poppins-semibold p-2 px-6 w-fit flex-center gap-2">Add</button>
+        <button onClick={add} className="mt-5 self-center anim bg-gradient1 text-xs rounded-md text-smoothWhite poppins-semibold p-2 px-6 w-fit flex-center gap-2">Add</button>
       </div>
   )
 }
