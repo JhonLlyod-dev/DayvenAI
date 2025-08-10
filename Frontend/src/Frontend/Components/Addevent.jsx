@@ -1,5 +1,6 @@
 import { X,Plus } from "lucide-react";
 import { useState } from "react";
+import Ding from "../../assets/Ding.mp3";
 
 import addEvent from "../../Backend/Functions/EventsAction";
 
@@ -38,6 +39,11 @@ export default function Addevent({Visible,Close,UID}) {
     setNote('');
   }
 
+    const playClickSound = () => {
+      const audio = new Audio(Ding);
+      audio.play();
+    };
+
 
   // Add event function
   async function add() {
@@ -47,6 +53,7 @@ export default function Addevent({Visible,Close,UID}) {
       setTimeout(() => {
         setError(false);
       }, 2000);
+      playClickSound();
       setLoading(false);
       return; // prevent submit logic from running
     }

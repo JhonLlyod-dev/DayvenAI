@@ -4,6 +4,9 @@ import { useState} from "react";
 import { EllipsisVertical,X,Plus } from "lucide-react";
 import Notif from "../Components_small/Notif";
 import MiniLoad from "../Components_small/miniload";
+import Done from "../../assets/Done.mp3";
+import Delete from "../../assets/Delete.mp3";
+
 
 import { setTime,formatToMonthDay } from "../../Backend/Functions/TimeFilter";
 
@@ -63,7 +66,7 @@ export default function EventsData({data}){
     }
 
     console.table(newdata);
-
+    
     try {
       await UpdateEventData(newdata ,data.id);
       setPop2(true);
@@ -71,6 +74,7 @@ export default function EventsData({data}){
         setPop2(false);
         setUpdateModal(false);
       },2000);
+      playClickSound();
     } catch (error) {
       setError(true);
       setTimeout(() => {
@@ -97,6 +101,15 @@ export default function EventsData({data}){
     return Time;
   }
 
+  const playClickSound = () => {
+    const audio = new Audio(Done);
+    audio.play();
+  };
+  const playDeleteSound = () => {
+    const audio = new Audio(Delete);
+    audio.play();
+  };
+
   const Date = formatToMonthDay(data.start);
   const [Pop,setPop] = useState(false);
   const Popup = () => {
@@ -121,9 +134,9 @@ export default function EventsData({data}){
   // UI for action buttons like mark as done, edit, delete
   const Action = (
     <div className="absolute z-5 border border-gray-200 border-t-3 border-t-gradient1 bg-smoothWhite rounded-lg w-fit top-1/4 right-10  flex flex-col p-4 gap-2 motion-preset-fade-md">
-      <button className="text-sm poppins-semibold anim  hover:text-green-500 transition hover:underline" onClick={async () => await UpdateEvent(data.id,'Completed')}>Mark as done</button>
+      <button className="text-sm poppins-semibold anim  hover:text-green-500 transition hover:underline" onClick={async () => {playClickSound(); await UpdateEvent(data.id,'Completed')}}>Mark as done</button>
       <button className="text-sm poppins-semibold anim  hover:text-gradient1 transition hover:underline" onClick={() => setUpdateModal(true)} >Edit</button>
-      <button className="text-sm poppins-semibold anim hover:text-red-500 transition hover:underline" onClick={async () => await DeleteEvent(data.id)} >Delete</button>
+      <button className="text-sm poppins-semibold anim hover:text-red-500 transition hover:underline" onClick={async () => {playDeleteSound(); await DeleteEvent(data.id);}} >Delete</button>
     </div>
   );
 

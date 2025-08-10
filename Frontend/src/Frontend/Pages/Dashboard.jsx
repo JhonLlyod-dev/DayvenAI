@@ -27,6 +27,7 @@ export default function Dashboard({user,myEvent}) {
 
   const Upevents = Events.filter((item) => dayjs(item.start).isAfter(dayjs(), 'day')).slice(0,6);
   const Today = Events.filter((item) => item.start === dayjs().format('YYYY-MM-DD'));
+  const EventsData = Events.filter((item) => dayjs(item.start).isAfter(dayjs(), 'day'));
 
   
 
@@ -109,7 +110,7 @@ export default function Dashboard({user,myEvent}) {
           </div>
 
           <div className="flex-1">
-            <Chatbox user={user.uid}/>
+            <Chatbox user={user.uid} events={EventsData}/>
           </div>
         </div>
       </div>

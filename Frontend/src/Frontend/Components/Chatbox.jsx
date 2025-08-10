@@ -1,4 +1,4 @@
-import { SendHorizontal,Bot,User,Clock } from "lucide-react";
+import { SendHorizontal,Bot,User,Clock,CircleCheck,CirclePlus,Calendar } from "lucide-react";
 import { useState,useEffect,useRef } from "react";
 import ReactMarkdown from 'react-markdown';
 import dayjs from "dayjs";
@@ -6,10 +6,12 @@ import { setTime } from "../../Backend/Functions/TimeFilter";
 
 import { main } from "../../Backend/API/AI";
 import Waiting from "../Components_small/waiting";
+import Ding from "../../assets/Ding.mp3";
 
 import addEvent from "../../Backend/Functions/EventsAction";
+import { set } from "firebase/database";
 
-export default function Chatbox({user}){
+export default function Chatbox({user,events}){
 
   const [Prompt,setPrompt] = useState('');
 
@@ -21,7 +23,7 @@ export default function Chatbox({user}){
       }
     }
   ]);
-   async function ask(prompt){
+   async function ask(prompt,events){
 
     const usermsg = {
       type:'USER',
@@ -31,8 +33,6 @@ export default function Chatbox({user}){
     }
     const updatedMessages = [...conversation,usermsg];
 
-    const memory = updatedMessages.map((message) => `${message.type}: ${message.message}`).join('\n');
-
     setConversation([...updatedMessages,{ type: 'AI', message: { response: '...'} }]);
 
     setPrompt('');
@@ -40,7 +40,7 @@ export default function Chatbox({user}){
     let AI_response = {};
 
     try {
-     const response = await main(prompt,memory);
+     const response = await main(prompt,updatedMessages,events);
 
      try {
       const parsedResponse = JSON.parse(response);
@@ -57,15 +57,25 @@ export default function Chatbox({user}){
   }
 
   function handleSubmit(e){
-    if(e.key === 'Enter' ){
-      if(Prompt !== ''){ 
-        ask(Prompt);
+    if(e.key === 'Enter' && !e.shiftKey ){
+      e.preventDefault();
+      if(Prompt.trim() !== ''){
+        ask(Prompt,events);
       } else{
         console.log('Input is empty nabuyong ka?');
         return;
       }
     }
   }
+
+  const textareaRef = useRef(null);
+
+  const handleInput = (e) => {
+    const textarea = textareaRef.current;
+    textarea.style.height = "auto"; // reset height
+    textarea.style.height = textarea.scrollHeight + "px"; // adjust to content
+    setPrompt(e.target.value);
+  };
 
 
   const bottomRef = useRef(null);
@@ -99,9 +109,17 @@ export default function Chatbox({user}){
         <div ref={bottomRef}/>
       </div >
 
-      <div className="mt-4 flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full p-2 px-4">
-        <input type="text" onKeyDown={(e) => handleSubmit(e)} value={Prompt}  onChange={(e) => setPrompt(e.target.value)} className="w-full outline-0 " />
-        <SendHorizontal onClick={() => ask(Prompt)} className="anim" size={18} strokeWidth={2} />
+      <div className="mt-4 flex items-end gap-2 border border-gray-200 shadow-sm rounded-lg w-full p-2 px-4">
+        <textarea
+          ref={textareaRef}
+          value={Prompt}
+          onChange={handleInput}
+          onKeyDown={handleSubmit}
+          className="w-full outline-none resize-none overflow-hidden"
+          placeholder="Type your message..."
+          rows={1}
+        />
+        <SendHorizontal onClick={() => ask(Prompt)} className="anim" size={22} strokeWidth={2} />
       </div>
     </div>
   );
@@ -155,6 +173,8 @@ function ChatData({user,data}){
 
 function EventModal({user,data}){
 
+  const [isAdded, setIsAdded] = useState(false);
+
   const Time = ()=>{
 
     let Time = '';
@@ -171,15 +191,23 @@ function EventModal({user,data}){
     return Time;
   }
 
-  async function add(){
+  const playClickSound = () => {
+    const audio = new Audio(Ding);
+    audio.play();
+  };
 
+  async function add(){
+    playClickSound();
+    if(isAdded){
+      return;
+    }
     try {
       await addEvent(data.title,data.type,data.start,data.end,data.allday,data.time,'High',data.note,'AI',user);
-      alert('Event added');
     } catch (error) {
       alert(error);
       console.error('❌ Error adding event:', error);
     }
+    setIsAdded(true);
   }
 
   return(
@@ -189,13 +217,19 @@ function EventModal({user,data}){
           <span className="text-xs font-semibold">{data.priority}</span>
         </div>
 
-        <span className="text-xs text-gray-500 poppins-semibold">
-          {data.end ? dayjs(data.start).format(' MMM D, YYYY') + ' - ' + dayjs(data.end).format(' MMM D, YYYY') : dayjs(data.start).format(' MMM D, YYYY') }
-        </span>
+        <div className="flex items-center justify-between text-xs text-gray-500 poppins-semibold">
+          <span className="flex items-center gap-1">
+            <Calendar size={15} strokeWidth={2.5} />
+            {data.start !== data.end
+              ? dayjs(data.start).format(' MMM D, YYYY') + ' - ' + dayjs(data.end).format(' MMM D, YYYY')
+              : dayjs(data.start).format(' MMM D, YYYY')}
+          </span>
 
-        <span className="text-xs text-gray-500 flex items-center gap-1 poppins-semibold">
-          <Clock size={15} strokeWidth={2.5} /> {data.time.allDay === true ? 'All day' : Time()}
-        </span>
+          <span className="flex items-center gap-1">
+            <Clock size={15} strokeWidth={2.5} /> {data.time.allDay ? 'All day' : Time()}
+          </span>
+        </div>
+
 
         <span className="mt-1 px-2 py-0.5 poppins-semibold bg-blue-100 text-blue-600 rounded text-xs w-fit">
           {data.type}
@@ -203,8 +237,11 @@ function EventModal({user,data}){
         <span className="mt-2 text-xs text-gray-500 flex items-center gap-1 poppins-semibold">
           {data.note}
         </span>
+        
 
-        <button onClick={add} className="mt-5 self-center anim bg-gradient1 text-xs rounded-md text-smoothWhite poppins-semibold p-2 px-6 w-fit flex-center gap-2">Add</button>
+        <button disabled={isAdded} onClick={add}  className=" disabled:cursor-not-allowed mt-5 self-center anim bg-gradient1 text-xs rounded-md text-smoothWhite poppins-semibold p-2 px-6 w-fit flex-center gap-2">
+          {isAdded ? <><CircleCheck size={18} strokeWidth={2} /> Added</> : <> <CirclePlus size={18} strokeWidth={2} /> Add to Calendar</>}
+        </button>
       </div>
   )
 }

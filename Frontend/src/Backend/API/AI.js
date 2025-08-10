@@ -7,19 +7,29 @@ const endpoint = "https://models.github.ai/inference";
 const model = "openai/gpt-4.1";
 const model2 = "openai/gpt-4.1-mini";
 
-export async function main(Prompt,memory) {
+export async function main(Prompt,conversation,events) {
 
   const client = ModelClient(
     endpoint,
     new AzureKeyCredential(token),
   );
 
+  const messages = [
+    { role: 'system', content: SimplePrompt },
+    ...conversation.map(msg => ({
+      role: msg.type === 'USER' ? 'user' : 'assistant',
+      content: typeof msg.message === 'string'
+        ? msg.message
+        : JSON.stringify(msg.message)
+    })),
+    { role: 'system', content: `Current Time: ${new Date().toLocaleString()}` },
+    { role: 'system', content: `User Upcoming events: ${JSON.stringify(events)}` },
+    { role: 'user', content: Prompt },
+  ];
+
   const response = await client.path("/chat/completions").post({
     body: {
-      messages: [
-        { role:"system", content: `This is you: ${SimplePrompt}, our conversation: ${memory} `  },
-        { role:"user", content: Prompt }
-      ],
+      messages,
       temperature: 1,
       top_p: 1,
       model: model2
