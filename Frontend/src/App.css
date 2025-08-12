@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin 'tailwindcss-motion';
+@plugin "tailwindcss-intersect";
 
 @theme{
   --color-primary: #45BFF1;
@@ -35,5 +36,21 @@
 
   .anim:active{
     @apply scale-95
+  }
+  .under{
+    @apply transition-all ease-in duration-75 cursor-pointer
+  }
+  .under:hover{
+    @apply underline
+
+  }
+  .text-nav{
+    @apply flex-center flex-col transition-all ease-in duration-100 cursor-pointer;
+  }
+  .text-nav::after{
+    @apply content-[''] h-[2px] bg-myblack/70 w-0 rounded-2xl transition-all ease-in duration-100 ;
+  }
+  .text-nav:hover{
+    @apply after:w-full ;
   }
 }
