@@ -4,7 +4,7 @@ import Chat from '../Images/Chat.png'
 import { LandingCalendar } from '../Components/Calendar';
 import MiniChat from '../Components_small/miniChat';
 import MiniEvents from '../Components_small/miniEvents';
-import { ArrowRight,Rocket,Star,Phone,CircleArrowRight,CircleArrowLeft, Calendar,OctagonAlert } from 'lucide-react';
+import { ArrowRight,Rocket,Star,Phone,CircleArrowRight,CircleArrowLeft, BotMessageSquare,OctagonAlert } from 'lucide-react';
 
 import { Link } from 'react-router-dom';
 import { useNavigate} from "react-router-dom";
@@ -77,8 +77,8 @@ export default function Landing(){
           <div className='col-span-1 lg:col-span-2    flex justify-center'>
             <div className='w-full aspect-square bg-smoothWhite border-t-3 border-t-gradient1 rounded-xl shadow-lg p-4'>
               <div className='flex items-center text-gradient1 gap-1'>
-                <Calendar size={20} strokeWidth={2.5}/>
-                <h1 className='poppins-bold text-xl'>Calendar</h1>
+                <BotMessageSquare size={20} strokeWidth={2.5}/>
+                <h1 className='poppins-semibold text-xl'>Ready for Today?</h1>
               </div>
               <LandingCalendar/>
             </div>
