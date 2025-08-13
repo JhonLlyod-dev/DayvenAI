@@ -1,6 +1,5 @@
 import { Search as See,Funnel,CalendarDays,AlarmClock,PartyPopper,Plus   } from "lucide-react";
 
-import { upcomingEvents } from "../../Backend/Data/Data";
 import { useEffect, useState } from "react";
 import EventsData from "../Components/EventsList";
 import { EventChart,EventPieChart } from "../Components/Charts";

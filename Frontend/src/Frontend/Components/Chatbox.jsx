@@ -87,7 +87,7 @@ export default function Chatbox({user,events}){
 
   return(
     <div className="mt-2 flex-1 flex flex-col h-full w-full px-6">
-      <div className=" h-62 2xl:h-72 overflow-scroll pb-2 flex flex-col gap-2 w-full">
+      <div div className=" h-62 2xl:h-72 overflow-scroll pb-2 flex flex-col gap-2 w-full">
         {conversation && conversation.length > 0 ? (
           conversation.map((data, i) => (
             <div key={i} className={`motion-preset-fade-md flex gap-1 ${data?.type === 'AI' ? '': 'flex-row-reverse'} `}>

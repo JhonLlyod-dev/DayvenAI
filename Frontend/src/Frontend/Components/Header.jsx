@@ -69,7 +69,7 @@ export default function Header({user}){
   return(
     <div className=" flex text-myblack items-center justify-between poppins-regular p-4 md:px-15 ">
       <Link to='/dashboard'>
-        <div className='flex-center gap-2 cursor-pointer'>
+        <div className='anim flex-center gap-2 cursor-pointer'>
           <img src={Logo} className='motion-preset-slide-down-lg w-4 md:w-6' alt="logo" />
           <h1 className="motion-preset-slide-down-lg motion-delay-100 poppins-semibold text-xl md:text-2xl ">Dayven<span className='italic'>AI</span></h1>
         </div>

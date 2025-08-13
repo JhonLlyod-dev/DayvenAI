@@ -6,6 +6,7 @@ import multiMonthPlugin from '@fullcalendar/multimonth'
 
 
 import EventsFilter from '../../Backend/Functions/CalFilter';
+import { events } from '../../Backend/Data/Data';
 
 export const MiniCalendar = ({events}) => {
 
@@ -53,6 +54,29 @@ export const BigCalendar = ({events}) => {
         events={Myevents}
         height="100%"
         dayMaxEvents={2} // Full available height
+      />
+    </div>
+  );
+};
+
+export const LandingCalendar = () => {
+
+  return(
+    <div className="
+      flex-1 h-full bg-smoothWhite poppins-extrabold  text-xs text-myblack rounded-xl  w-full" >
+      <FullCalendar
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        initialView="dayGridMonth"
+        initialDate= '2025-08-01' // Set to August 2025 (or any year/month you want)
+        headerToolbar={{
+          start: '',
+          center: '',
+          end: '',
+        }}
+        selectable={true}
+        events={events}
+         height={'100%'}
+         dayMaxEvents={1}
       />
     </div>
   );

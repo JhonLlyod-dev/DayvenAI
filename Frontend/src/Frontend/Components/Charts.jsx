@@ -3,8 +3,6 @@ import {
   Line,PieChart, Pie,Cell, 
 } from "recharts";
 
-import { Eventdata } from "../../Backend/Data/Data";
-
 import { useEffect, useState } from "react";
 import { formatToOverAll,formatToAnnually,formatToWeekly } from "../../Backend/Functions/TimeFilter";
 

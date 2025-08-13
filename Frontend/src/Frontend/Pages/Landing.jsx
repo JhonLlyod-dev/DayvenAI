@@ -1,7 +1,10 @@
 import logo from '../Images/Logo/Time.png'
-import logo2 from '../Images/Logo/time_bg.png'
-import Pree from '../../assets/Pree.jpg'
-import { ArrowRight,Rocket,Star,Phone,CircleArrowRight,CircleArrowLeft } from 'lucide-react';
+import Chat from '../Images/Chat.png'
+
+import { LandingCalendar } from '../Components/Calendar';
+import MiniChat from '../Components_small/miniChat';
+import MiniEvents from '../Components_small/miniEvents';
+import { ArrowRight,Rocket,Star,Phone,CircleArrowRight,CircleArrowLeft, Calendar,OctagonAlert } from 'lucide-react';
 
 import { Link } from 'react-router-dom';
 import { useNavigate} from "react-router-dom";
@@ -72,8 +75,12 @@ export default function Landing(){
 
           {/* Right Section (Image/Illustration) */}
           <div className='col-span-1 lg:col-span-2    flex justify-center'>
-            <div className='w-full aspect-square bg-blue-300 rounded-xl shadow-lg'>
-              {/* Replace this div with an actual image or animation */}
+            <div className='w-full aspect-square bg-smoothWhite border-t-3 border-t-gradient1 rounded-xl shadow-lg p-4'>
+              <div className='flex items-center text-gradient1 gap-1'>
+                <Calendar size={20} strokeWidth={2.5}/>
+                <h1 className='poppins-bold text-xl'>Calendar</h1>
+              </div>
+              <LandingCalendar/>
             </div>
           </div>
         </section>
@@ -90,42 +97,64 @@ export default function Landing(){
               <h1 className="sm:text-3xl md:text-4xl xl:text-5xl poppins-black text-gradient1 text-center">DayvenAI</h1>
             </div>
 
-            <div className='intersect-once intersect:motion-preset-slide-right-md motion-delay-300 flex xl:flex-row flex-col items-center justify-between w-full md:w-[80%]  gap-5 xl:gap-20'>
+            <div className='intersect-once intersect:motion-preset-slide-right-lg motion-delay-400 flex xl:flex-row flex-col items-center justify-between w-full md:w-[90%]  gap-5 xl:gap-20'>
               <div className=' flex-1 flex flex-col gap-2 '>
                 <h1 className="sm:text-2xl md:text-3xl xl:text-4xl poppins-black text-gradient1">Intelligent Scheduling</h1>
-                <p className='text-myblack/70'>Automatically arranges tasks and events by analyzing availability, priorities, and user preferences for optimal time use.</p>
+                <p className='text-myblack/70'>Automatically recommend tasks and events by analyzing availability, priorities, and user preferences for optimal time use.</p>
               </div>
 
               <CircleArrowRight className='w-20 hidden xl:block transition-all ease-in duration-75 hover:text-gradient1' size={50} strokeWidth={1} />
 
-              <div className='flex-1 w-full h-100  bg-blue-300 rounded-xl shadow-lg'>
-                Pre
+              <div className='flex-1 relative flex-center overflow-scroll p-4 w-full h-100 border-t-3 border-t-gradient1 bg-smoothWhite rounded-xl shadow-lg'>
+                <MiniChat/>
               </div>
             </div>
             
-            <div className=' intersect-once intersect:motion-preset-slide-left-md motion-delay-300 flex xl:flex-row-reverse flex-col items-center justify-between w-full md:w-[80%]  gap-5 xl:gap-20'>
+            <div className=' intersect-once intersect:motion-preset-slide-left-lg motion-delay-400 flex xl:flex-row-reverse flex-col items-center justify-between w-full md:w-[90%]  gap-5 xl:gap-20'>
               <div className=' flex-1 flex flex-col gap-2 '>
                 <h1 className="sm:text-2xl md:text-3xl xl:text-4xl poppins-black text-gradient1">Priority-Based Planning</h1>
-                <p className='text-myblack/70'>Organizes tasks and events based on their importance and urgency to ensure the most critical items are handled first.</p>
+                <p className='text-myblack/70'>Dayven organizes events based on priority , highlighting their importance and urgency to ensure the most critical tasks are addressed first.</p>
               </div>
 
               <CircleArrowLeft className='w-20 hidden xl:block transition-all ease-in duration-75 hover:text-gradient1' size={50} strokeWidth={1} />
 
-              <div className='flex-1 w-full h-100  bg-blue-300 rounded-xl shadow-lg'>
-                Pre
+              <div className='flex-1 flex-center flex-col gap-4 w-full  h-100  border-t-3 border-t-gradient1 bg-smoothWhite rounded-xl shadow-lg'>
+                <div className='intersect-once intersect:motion-preset-fade-lg motion-delay-400 flex-center flex-col gap-1 '>
+                 <div className='flex-center h-12 w-12 bg-red-200 rounded-full'>
+                    <OctagonAlert strokeWidth={2.5} className='w-6 h-6 text-red-500'/>
+                 </div>
+                  <h3 className='poppins-bold text-xl text-red-500'>High Priority</h3>
+                  <p className='text-sm text-myblack/70 poppins-medium'>Must be done immediately</p>
+                </div>
+
+                <div className='intersect-once intersect:motion-preset-fade-lg motion-delay-700 flex-center flex-col gap-1 '>
+                  <div className='flex-center h-12 w-12 bg-orange-200 rounded-full'>
+                    <OctagonAlert strokeWidth={2.5} className='w-6 h-6 text-orange-500'/>
+                 </div>
+                  <h3 className='poppins-bold text-xl text-orange-500'>Medium Priority</h3>
+                  <p className='text-sm text-myblack/70 poppins-medium'>Important but can wait</p>
+                </div>
+
+                <div className='intersect-once intersect:motion-preset-fade-lg motion-delay-1000 flex-center flex-col gap-1'>
+                  <div className='flex-center h-12 w-12 bg-amber-200 rounded-full'>
+                    <OctagonAlert strokeWidth={2.5} className='w-6 h-6 text-amber-500'/>
+                 </div>
+                  <h3 className='poppins-bold text-xl text-amber-500'>Low Priority</h3>
+                  <p className='text-sm text-myblack/70 poppins-medium'>Optional or less critical</p>
+                </div>
               </div>
             </div>
 
-            <div className='intersect-once intersect:motion-preset-slide-right-md motion-delay-300 flex xl:flex-row flex-col items-center justify-between w-full md:w-[80%] gap-5 xl:gap-20'>
+            <div className='intersect-once intersect:motion-preset-slide-right-lg motion-delay-400 flex xl:flex-row flex-col items-center justify-between w-full md:w-[90%] gap-5 xl:gap-20'>
               <div className=' flex-1 flex flex-col gap-2 w-full'>
-                <h1 className="sm:text-2xl md:text-3xl xl:text-4xl poppins-black text-gradient1">Conflict Resolution</h1>
-                <p className='text-myblack/70 '>Detects, analyzes, and efficiently resolves scheduling overlaps, resource conflicts, to maintain a smooth, non-disruptive plan.</p>
+                <h1 className="sm:text-2xl md:text-3xl xl:text-4xl poppins-black text-gradient1">Real-Time Schedule Updates</h1>
+                <p className='text-myblack/70 '>Dayven instantly updates your schedule as changes happen, keeping your calendar current and your plans optimized in real time.</p>
               </div>
 
               <CircleArrowRight className='w-20 hidden xl:block transition-all ease-in duration-75 hover:text-gradient1' size={50} strokeWidth={1} />
 
-              <div className='flex-1 w-full h-100  bg-blue-300 rounded-xl shadow-lg'>
-                Pre
+              <div className='intersect-once intersect:motion-preset-fade-md motion-delay-800 flex-1 w-full h-100  border-t-3 border-t-gradient1 bg-smoothWhite rounded-xl shadow-lg'>
+                <MiniEvents/>
               </div>
             </div>
 

@@ -3,20 +3,20 @@ import { setTime } from "../../Backend/Functions/TimeFilter";
 
 export default function Reminder({data}){
 
-    const Time = ()=>{
-  
-      let Time = '';
-  
-      if(data.time.allDay === true){
-        Time = 'All day';
-      } else if(data.time.start === data.time.end){
-        Time = setTime(data.time.start);
-      } else {
-        Time = `${setTime(data.time.end)}`;
-      }
-  
-      return Time;
+  const Time = ()=>{
+
+    let Time = '';
+
+    if(data.time.allDay === true){
+      Time = 'All day';
+    } else if(data.time.start === data.time.end){
+      Time = setTime(data.time.start);
+    } else {
+      Time = `${setTime(data.time.end)}`;
     }
+
+    return Time;
+  } 
 
   const statusStyles = {
     "Ongoing": "text-amber-500",     // In progress
@@ -41,7 +41,7 @@ export default function Reminder({data}){
 
   
   return(
-    <div  className={`flex items-center justify-between bg-smoothWhite rounded-lg shadow-sm px-4 py-3 border-l-3 ${statusBorder[data.status]} border border-gray-200 w-full`}>
+    <div  className={`  flex items-center justify-between bg-smoothWhite rounded-lg shadow-sm px-4 py-3 border-l-3 ${statusBorder[data.status]} border border-gray-200 w-full`}>
       {/* Icon + Content */}
       <div className="flex-center gap-3 w-full min-w-0">
         {/* Type Icon */}

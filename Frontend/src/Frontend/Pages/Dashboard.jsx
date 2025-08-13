@@ -9,7 +9,6 @@ import dayjs from "dayjs";
 
 import { Link } from "react-router-dom";
 
-import { reminders} from '../../Backend/Data/Data.js';
  
 import { BellRing,Pin, ChevronRight,Bot,ChartNoAxesColumn } from "lucide-react";
 
