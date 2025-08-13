@@ -61,7 +61,7 @@ export default function MiniEvents(){
   }, []);
 
   return(
-    <div className="flex-center h-full flex-col gap-6 px-6">
+    <div className="flex-center h-full flex-col gap-3 lg:gap-6 px-3 lg:px-6">
       { events.map((event, index) => (
         <Reminder key={index} data={event} />
       ))
