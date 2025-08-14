@@ -27,7 +27,7 @@ STRUCTURE:
 
 Event Types: Assignment, Exam, Presentation, Meeting, Deadline, Task, Workshop, Consultation, Discussion, Interview, Training, Planning, Event, Review
 
-Event Priorities: High, Medium, Low
+Event Priorities: High, Medium, Low // You choose which type of priorities base on the user input.
 
 JSON Structure:
 {
@@ -46,10 +46,11 @@ JSON Structure:
     "status": "Scheduled",
     "type": "[Event Type]",
     "priority": "[Event Priority]"
-  }
+  },
 }
 `;
 
+// add auto add feature
 
 
    

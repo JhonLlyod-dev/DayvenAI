@@ -112,6 +112,14 @@ export default function EventsData({data}){
 
   const Date = formatToMonthDay(data.start);
   const [Pop,setPop] = useState(false);
+
+  const statusStyles = {
+    "Ongoing": "text-amber-500",     // In progress
+    "Scheduled": "text-gradient1",   // Upcoming
+    "Missed": "text-red-600",        // Not done
+    "Completed": "text-green-500",   // Successfully finished
+  };
+
   const Popup = () => {
 
     return (
@@ -119,7 +127,7 @@ export default function EventsData({data}){
       motion-preset-fade-md`}>
         <div className="flex items-center justify-between">
           <span className="text-sm poppins-semibold text-myblack">{data.title}</span>
-          <span className="text-xs poppins-semibold text-myblack">{data.status}</span>
+          <span className={`text-xs poppins-bold ${statusStyles[data.status]}`}>{data.status}</span>
         </div>
         <span className="text-xs text-gray-500 flex items-center gap-1 poppins-semibold"><Clock size={15} strokeWidth={2.5} />{data.time.allDay === true ? 'All day' : Time()} </span>
         <span className="mt-1 px-2 py-0.5 poppins-semibold bg-blue-100 text-blue-600 rounded text-xs w-fit">{data.type}</span>
@@ -208,7 +216,7 @@ export default function EventsData({data}){
               </select>
             </div>
 
-            { !allday &&
+            {!allday &&
               <div className=" motion-preset-fade-sm col-span-2 flex items-center justify-between w-full text-xs">
                 {/* Time In */}
                 <div className="flex flex-col gap-1">
@@ -240,6 +248,12 @@ export default function EventsData({data}){
     </div>
   )
 
+  const priority = {
+    "High": "bg-red-100 text-red-500",
+    "Medium": "bg-orange-100 text-orange-500",
+    "Low": "bg-amber-100 text-amber-500",
+  }
+
 
   return(
     <div  className="relative cursor-pointer flex items-center gap-4 p-3 bg-white rounded-lg shadow hover:shadow-md transition">
@@ -248,14 +262,17 @@ export default function EventsData({data}){
       {UpdateModal && UpdateEventModal}
       <div onMouseEnter={() => setPop(true)} onMouseLeave={() => setPop(false)} className="flex items-center gap-4 flex-1">
         {Pop && Popup()}
-        <div className="flex flex-col items-center poppins-extrabold justify-center w-16 h-16 bg-blue-100 text-blue-600 rounded-md">
+        <div className={`flex flex-col items-center poppins-extrabold justify-center w-16 h-16  rounded-md bg-blue-100 text-blue-600 `}>
           <span className="text-xl ">{Date.day}</span>
           <span className="text-sm  uppercase">{Date.month}</span>
         </div>
-        <div className="flex-1 flex flex-col text-sm">
+        <div className="flex-1 flex flex-col text-sm gap-.5">
           <span className="text-base poppins-semibold text-myblack">{data.title}</span>
           <span className="text-gray-500 text-xs flex items-center gap-1 poppins-semibold"><Clock size={15} strokeWidth={2.5} /> {data.time.allDay === true ? 'All day' : Time()}</span>
-          <span className="mt-1 px-2 py-0.5 poppins-semibold bg-blue-100 text-blue-600 rounded text-xs w-fit">{data.type}</span>
+          <div className="flex items-center gap-2">
+            <span className="mt-1 px-2 py-0.5 poppins-semibold bg-blue-100 text-blue-600 rounded text-xs w-fit">{data.type}</span>
+            <span className={`mt-1 px-2 py-0.5 poppins-semibold ${priority[data.priority]} rounded text-xs w-fit`}>{data.priority}</span>
+          </div>
         </div>
       </div>
       <div onMouseEnter={() => setActionPop(true)} onMouseLeave={() => setActionPop(false)} className="pl-3">

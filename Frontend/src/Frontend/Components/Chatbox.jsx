@@ -87,7 +87,7 @@ export default function Chatbox({user,events}){
 
   return(
     <div className="mt-2 flex-1 flex flex-col h-full w-full px-6">
-      <div div className=" h-62 2xl:h-72 overflow-scroll pb-2 flex flex-col gap-2 w-full">
+      <div className=" h-62 2xl:h-72 overflow-scroll pb-2 flex flex-col gap-2 w-full">
         {conversation && conversation.length > 0 ? (
           conversation.map((data, i) => (
             <div key={i} className={`motion-preset-fade-md flex gap-1 ${data?.type === 'AI' ? '': 'flex-row-reverse'} `}>
@@ -196,13 +196,20 @@ function EventModal({user,data}){
     audio.play();
   };
 
+  const [autoadd, setAutoadd] = useState(true);
+
+  useEffect(() => {
+    if (!isAdded && autoadd && data?.title && data?.type && data?.start && data?.end) {
+      add();
+    }
+  }, [isAdded]);
   async function add(){
-    playClickSound();
     if(isAdded){
       return;
     }
+    playClickSound();
     try {
-      await addEvent(data.title,data.type,data.start,data.end,data.allday,data.time,'High',data.note,'AI',user);
+      await addEvent(data.title,data.type,data.start,data.end,data.allday,data.time,data.priority,data.note,'AI',user);
     } catch (error) {
       alert(error);
       console.error('❌ Error adding event:', error);
@@ -210,11 +217,16 @@ function EventModal({user,data}){
     setIsAdded(true);
   }
 
+  const priority = {
+    "High": "bg-red-100 text-red-500",
+    "Medium": "bg-orange-100 text-orange-500",
+    "Low": "bg-amber-100 text-amber-500",
+  }
+
   return(
       <div className="mt-6 flex flex-col bg-smoothWhite shadow-sm border border-gray-200 rounded-lg border-l-3 text-sm border-l-gradient1 p-2 px-4">
         <div className="flex justify-between items-center mb-1">
           <h3 className="font-semibold">{data.title}</h3>
-          <span className="text-xs font-semibold">{data.priority}</span>
         </div>
 
         <div className="flex items-center justify-between text-xs text-gray-500 poppins-semibold">
@@ -231,9 +243,12 @@ function EventModal({user,data}){
         </div>
 
 
-        <span className="mt-1 px-2 py-0.5 poppins-semibold bg-blue-100 text-blue-600 rounded text-xs w-fit">
-          {data.type}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="mt-1 px-2 py-0.5 poppins-semibold bg-blue-100 text-blue-600 rounded text-xs w-fit">
+            {data.type}
+          </span>
+          <span className={`mt-1 px-2 py-0.5 poppins-semibold ${priority[data.priority]} rounded text-xs w-fit`}>{data.priority}</span>
+        </div>
         <span className="mt-2 text-xs text-gray-500 flex items-center gap-1 poppins-semibold">
           {data.note}
         </span>
