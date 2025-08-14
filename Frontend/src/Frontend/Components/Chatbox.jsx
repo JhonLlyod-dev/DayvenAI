@@ -11,7 +11,7 @@ import Ding from "../../assets/Ding.mp3";
 import addEvent from "../../Backend/Functions/EventsAction";
 import { set } from "firebase/database";
 
-export default function Chatbox({user,events}){
+export default function Chatbox({user,events,autoadd}){
 
   const [Prompt,setPrompt] = useState('');
 
@@ -97,7 +97,7 @@ export default function Chatbox({user,events}){
               { data.message.response === '...' ?
                 <p className="text-sm border border-gray-200 p-1 px-2 rounded-lg shadow-md max-w-[50%]"><Waiting/></p>
                   : 
-                <ChatData data={data} user={user} />
+                <ChatData data={data} autoadd={autoadd} user={user} />
               }
             </div>
           ))
@@ -126,7 +126,7 @@ export default function Chatbox({user,events}){
 }
 
 
-function ChatData({user,data}){
+function ChatData({user,data,autoadd}){
 
 
   return(
@@ -164,14 +164,14 @@ function ChatData({user,data}){
       >
         {data.message.response}
       </ReactMarkdown>
-      { data.type === 'AI' && data.message.event && <EventModal user={user} data={data.message.event}/>}
+      { data.type === 'AI' && data.message.event && <EventModal autoadd={autoadd} user={user} data={data.message.event}/>}
         
     </div>
 
   );
 }
 
-function EventModal({user,data}){
+function EventModal({user,data,autoadd}){
 
   const [isAdded, setIsAdded] = useState(false);
 
@@ -195,8 +195,6 @@ function EventModal({user,data}){
     const audio = new Audio(Ding);
     audio.play();
   };
-
-  const [autoadd, setAutoadd] = useState(true);
 
   useEffect(() => {
     if (!isAdded && autoadd && data?.title && data?.type && data?.start && data?.end) {
@@ -260,4 +258,6 @@ function EventModal({user,data}){
       </div>
   )
 }
+
+
 

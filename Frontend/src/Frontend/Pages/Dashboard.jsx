@@ -28,7 +28,12 @@ export default function Dashboard({user,myEvent}) {
   const Today = Events.filter((item) => item.start === dayjs().format('YYYY-MM-DD'));
   const EventsData = Events.filter((item) => dayjs(item.start).isAfter(dayjs(), 'day'));
 
-  
+
+  // localstorage the auto add
+  const [autoadd, setAutoadd] = useState(true);
+
+
+  const toggle = () => setAutoadd(prev => !prev);
 
   return (
     <div className="motion-preset-fade-lg px-4 md:px-10 pb-4 text-myblack  w-full min-h-full flex flex-col gap-6">
@@ -103,16 +108,42 @@ export default function Dashboard({user,myEvent}) {
 
         {/* AI Chat Assistant */}
         <div className="motion-preset-blur-up-lg motion-delay-400 bg-smoothWhite shadow-md border-t-3 border-gradient1 rounded-xl p-4 flex flex-col min-h-[16rem] h-full">
-          <div className="flex items-center gap-2">
-            <Bot className="" size={28} />
-            <h3 className="text-lg poppins-bold ">Dayven</h3>
-          </div>
+            <div className="flex items-center justify-between border-b border-gray-200 pb-2">
+              <div className="flex items-center gap-2">
+                <Bot className="" size={28} />
+                <h3 className="text-lg poppins-bold ">Dayven</h3>
+              </div>
+              <div  className="flex items-center gap-2">
+                <h1 className="text-sm poppins-bold">Auto-schedule</h1>
+                <ToggleSwitch autoadd={autoadd}  toggle={toggle}/>
+              </div>
+            </div>
 
           <div className="flex-1">
-            <Chatbox user={user.uid} events={EventsData}/>
+            <Chatbox user={user.uid} autoadd={autoadd} events={EventsData}/>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+function ToggleSwitch({toggle, autoadd}) {
+  const [enabled, setEnabled] = useState(autoadd);
+
+  return (
+    <label className=" transition-all ease-in duration-75 scale-95 relative inline-flex items-center cursor-pointer">
+      <input
+        type="checkbox"
+        checked={enabled}
+        onChange={() => {setEnabled(!enabled); toggle();}}
+        className="sr-only peer"
+      />
+      {/* Track */}
+      <div className="w-11 h-6 rounded-full transition-colors duration-300 bg-gray-300 peer-checked:bg-gradient1"></div>
+      {/* Thumb */}
+      <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"></div>
+    </label>
+  );
+}
+
