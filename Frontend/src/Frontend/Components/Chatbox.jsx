@@ -9,6 +9,7 @@ import Waiting from "../Components_small/waiting";
 import Ding from "../../assets/Ding.mp3";
 
 import addEvent from "../../Backend/Functions/EventsAction";
+import { UpdateEventData,DeleteEvent } from "../../Backend/Functions/EventsAction";
 import { set } from "firebase/database";
 
 export default function Chatbox({user,events,autoadd}){
@@ -115,7 +116,7 @@ export default function Chatbox({user,events,autoadd}){
           value={Prompt}
           onChange={handleInput}
           onKeyDown={handleSubmit}
-          className="w-full outline-none resize-none overflow-hidden"
+          className="w-full outline-none resize-none overflow-auto max-h-[140px] selection:bg-gradient1 selection:text-white"
           placeholder="Type your message..."
           rows={1}
         />
@@ -127,6 +128,61 @@ export default function Chatbox({user,events,autoadd}){
 
 
 function ChatData({user,data,autoadd}){
+const MultiEvent = data.message?.event;
+const UpdateEvents = data.message?.UpdateEvent;
+const DeleteEvents = data.message?.DeleteEvents;
+
+const playClickSound = () => {
+  const audio = new Audio(Ding);
+  audio.play();
+};
+
+useEffect(() => {
+  const processEvents = async () => {
+    const hasMulti = autoadd && Array.isArray(MultiEvent) && MultiEvent.length > 1;
+    const hasUpdates = Array.isArray(UpdateEvents) && UpdateEvents.length > 0;
+    const hasDeletes = Array.isArray(DeleteEvents) && DeleteEvents.length > 0;
+
+    // ✅ Play sound only once if ANY condition is true
+    if (hasMulti || hasUpdates || hasDeletes) {
+      playClickSound();
+    }
+
+    // Handle MultiEvent
+    if (hasMulti) {
+      for (const event of MultiEvent) {
+        await addEvent(
+          event.title,
+          event.type,
+          event.start,
+          event.end,
+          event.allday,
+          event.time,
+          event.priority,
+          event.note,
+          "AI",
+          user
+        );
+      }
+    }
+
+    // Handle UpdateEvents
+    if (hasUpdates) {
+      for (const updateItem of UpdateEvents) {
+        await UpdateEventData(updateItem.event, updateItem.eventId);
+      }
+    }
+
+    // Handle DeleteEvents
+    if (hasDeletes) {
+      for (const deleteItem of DeleteEvents) {
+        await DeleteEvent(deleteItem.eventId);
+      }
+    }
+  };
+
+  processEvents();
+}, [autoadd, MultiEvent, UpdateEvents, DeleteEvents, user]);
 
 
   return(
@@ -164,8 +220,9 @@ function ChatData({user,data,autoadd}){
       >
         {data.message.response}
       </ReactMarkdown>
-      { data.type === 'AI' && data.message.event && <EventModal autoadd={autoadd} user={user} data={data.message.event}/>}
-        
+      {data.type === 'AI' && Array.isArray(data.message?.event) && data.message.event.length === 1 && (
+        <EventModal autoadd={autoadd} user={user} data={data.message.event[0]} />
+      )}
     </div>
 
   );

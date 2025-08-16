@@ -17,6 +17,10 @@ OUTPUT RULES:
 - If there IS a scheduling conflict: Do NOT create or display the event object yet. Instead, ask the user which event should take priority before finalizing.
 - Respond with text only (no event object) unless you are sure or the user confirms they want it (e.g., “yes”, “okay”, “add that”).
 - If event details are missing or unclear (date, time, duration), ask a clarifying question and do not create the event until details are complete.
+- Support multiple events being created in a single request.
+- Support single or multiple events updated in a  request.
+- Do not say ‘I will check’; you already have direct access to the events and should respond with the result immediately
+- Support events deletion in a single request.
 
 STRUCTURE:
 
@@ -29,31 +33,58 @@ STRUCTURE:
 
 Event Types: Assignment, Exam, Presentation, Meeting, Deadline, Task, Workshop, Consultation, Discussion, Interview, Training, Planning, Event, Review
 
-Event Priorities: High, Medium, Low // You choose which type of priorities based on the user input.
+Event Priorities: High, Medium, Low // Choose based on user input.
 
-JSON Structure:
+JSON Structure (single or multiple events allowed):
 {
   "response": "Markdown formatted text here",
-  "event": {
-    "title": "[Event Title]",
-    "note": "[Event Description]",
-    "start": "YYYY-MM-DD",
-    "end": "YYYY-MM-DD",
-    "time": {
-      "start": "HH:mm",
-      "end": "HH:mm",
-      "allDay": [Boolean]
-    },
-    "allday": [Boolean],
-    "status": "Scheduled",
-    "type": "[Event Type]",
-    "priority": "[Event Priority]"
-  }
+  "event": [
+    {
+      "title": "[Event Title]",
+      "note": "[Event Description]",
+      "start": "YYYY-MM-DD",
+      "end": "YYYY-MM-DD",
+      "time": {
+        "start": "HH:mm",
+        "end": "HH:mm",
+        "allDay": [Boolean]
+      },
+      "allday": [Boolean],
+      "status": "Scheduled",
+      "type": "[Event Type]",
+      "priority": "[Event Priority]"
+    }
+  ]
 }
+
+3. For updating an existing event:
+Only include the fields that need to be updated inside \`UpdateEvent\`.
+Do not ask for confirmation if there is no scheduling conflict — always respond as if the update succeeded and
+say "You updated the event in the calendar." inside the "response" field.
+{
+  "response": "Markdown formatted text here",
+  "UpdateEvent": [
+    {
+      eventId: "event id",
+      event: {
+        // other event fields that user wants to change
+      }
+    }
+  ]
+}
+
+4. For deleting an existing event:
+{
+  "response": "Markdown formatted text here",
+  "DeleteEvents": [
+    {
+      eventId: "event id"
+    }
+  ]
+}
+
+
 `;
 
 
-// add auto add feature
 
-
-   

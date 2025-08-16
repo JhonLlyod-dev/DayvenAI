@@ -26,7 +26,7 @@ export default function Dashboard({user,myEvent}) {
 
   const Upevents = Events.filter((item) => dayjs(item.start).isAfter(dayjs(), 'day')).slice(0,6);
   const Today = Events.filter((item) => item.start === dayjs().format('YYYY-MM-DD'));
-  const EventsData = Events.filter((item) => dayjs(item.start).isAfter(dayjs(), 'day'));
+  const EventsData = Events.filter((item) => item.status === 'Scheduled');
 
 
   // localstorage the auto add

@@ -1,4 +1,4 @@
-import { Search as See,Funnel,CalendarDays,AlarmClock,PartyPopper,Plus   } from "lucide-react";
+import { Search as See,Funnel,CalendarDays,AlarmClock,PartyPopper,Plus,OctagonAlert   } from "lucide-react";
 
 import { useEffect, useState } from "react";
 import EventsData from "../Components/EventsList";
@@ -23,7 +23,8 @@ export default function Events({user,myEvent}){
   const [FindDate, setFindDate] = useState('');
   const [addevent,setAddevent] = useState(false);
 
-const Filter = (Search) => {
+
+  const Filter = (Search) => {
   let filtered = Events;
 
   if (Search?.trim()) {
@@ -34,7 +35,9 @@ const Filter = (Search) => {
     );
   }
 
-  if (Order && Order !== 'All') {
+  if (Order && Order === 'All') {
+    filtered = filtered.filter((item) => item.status !== 'Completed');
+  } else if (Order && Order !== 'All') {
     filtered = filtered.filter((item) => item.status === Order);
   }
 
@@ -45,10 +48,10 @@ const Filter = (Search) => {
       (dayjs(item.start).isBefore(FindDate, 'day') && dayjs(item.end).isAfter(FindDate, 'day'))
     );
   }
-
+  
   if (Prio && Prio !== 'All') {
     filtered = filtered.filter((item) => item.priority === Prio);
-  }
+  } 
 
   return filtered;
 };
@@ -135,51 +138,74 @@ const queries = Filter(Search);
             <h1 className="poppins-bold">Scheduled</h1>
             <button onClick={()=> setAddevent(true)} className="anim bg-gradient1 text-xs rounded-md text-smoothWhite poppins-semibold p-2 px-4 w-fit flex-center gap-2">Create Event <Plus size={15} strokeWidth={3}/></button>
           </div>
-          <div className="flex gap-2">
-            <div className=" flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full p-2 px-4">
-              <input type="text" value={Search} placeholder="Search Events" onChange={(e)=> setSearch(e.target.value)} className="w-full  outline-0 text-sm font-medium" />
-              <See size={18} strokeWidth={2}/>
+          <div className="flex flex-col gap-3 w-full">
+            {/* Search bar at the top */}
+            <div className="flex gap-2 border border-gray-200 shadow-sm rounded-lg w-[70%] p-2 px-4">
+              <input
+                type="text"
+                value={Search}
+                placeholder="Search Events"
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full outline-0 text-sm font-medium placeholder:text-myblack/70"
+              />
+              <See size={18} strokeWidth={2} />
             </div>
 
-            <div className="flex-1/2 flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full   items-center">
-              <input value={FindDate} onChange={(e)=> setFindDate(e.target.value)} type="date" className="appearance-none bg-transparent text-sm font-medium p-2 px-4 outline-none w-full" />
-            </div>
+            {/* Filters row */}
+            <div className="grid grid-cols-3 gap-3">
+              {/* Date Filter */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs poppins-semibold text-gray-600">Date</label>
+                <div className="flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full items-center">
+                  <input
+                    value={FindDate}
+                    onChange={(e) => setFindDate(e.target.value)}
+                    type="date"
+                    className="appearance-none bg-transparent text-sm font-medium p-2 px-4 outline-none w-full"
+                  />
+                </div>
+              </div>
 
-            <div className="flex-1/2 flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full pr-4   items-center">
-              <select
-                value={Prio}
-                onChange={(e)=> setPrio(e.target.value)}
-                className="appearance-none bg-transparent text-sm font-medium p-2 px-4 outline-none w-full"
-                name=""
-                id=""
-              >
-                <option value="All" className="font-medium ">All</option>
-                <option value="High" className="font-medium ">High</option>
-                <option value="Medium" className="font-medium">Medium</option>
-                <option value="Low" className="font-medium">Low</option>
-              </select>
-              <Funnel size={18} strokeWidth={2} />
-            </div>
+              {/* Priority Filter */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs poppins-semibold text-gray-600">Priority</label>
+                <div className="flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full pr-4 items-center">
+                  <select
+                    value={Prio}
+                    onChange={(e) => setPrio(e.target.value)}
+                    className="appearance-none bg-transparent text-sm font-medium p-2 px-4 outline-none w-full"
+                  >
+                    <option value="All">All</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                  </select>
+                  <OctagonAlert size={18} strokeWidth={2} />
+                </div>
+              </div>
 
-            <div className="flex-1/2 flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full pr-4   items-center">
-              <select
-                value={Order}
-                onChange={(e)=> setOrder(e.target.value)}
-                className="appearance-none bg-transparent text-sm font-medium p-2 px-4 outline-none w-full"
-                name=""
-                id=""
-              >
-                <option value="All" className="font-medium ">All</option>
-                <option value="Ongoing" className="font-medium ">Ongoing</option>
-                <option value="Scheduled" className="font-medium">Scheduled</option>
-                <option value="Missed" className="font-medium">Missed</option>
-                <option value="Completed" className="font-medium">Completed</option>
-              </select>
-              <Funnel size={18} strokeWidth={2} />
+              {/* Status Filter */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs poppins-semibold text-gray-600">Status</label>
+                <div className="flex gap-2 border border-gray-200 shadow-sm rounded-lg w-full pr-4 items-center">
+                  <select
+                    value={Order}
+                    onChange={(e) => setOrder(e.target.value)}
+                    className="appearance-none bg-transparent text-sm font-medium p-2 px-4 outline-none w-full"
+                  >
+                    <option value="All">All</option>
+                    <option value="Ongoing">Ongoing</option>
+                    <option value="Scheduled">Scheduled</option>
+                    <option value="Missed">Missed</option>
+                    <option value="Completed">Completed</option>
+                  </select>
+                  <Funnel size={18} strokeWidth={2} />
+                </div>
+              </div>
             </div>
-
           </div>
-          <div className="w-full max-h-155 flex flex-col gap-3 overflow-scroll p-2">
+
+          <div className="w-full max-h-143 pb-40 flex flex-col gap-3 overflow-scroll p-2">
             {queries.map((data,i)=>(
               <EventsData key={i} data={data}/>
             ))}
