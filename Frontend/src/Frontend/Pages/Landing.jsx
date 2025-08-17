@@ -245,7 +245,7 @@ export default function Landing(){
         </div>
 
         <div className='flex justify-center py-4'>
-          <h1>DayvenAI © 2023 All Rights Reserved</h1>
+          <h1>DayvenAI © 2025 All Rights Reserved</h1>
         </div>
 
       </footer>
