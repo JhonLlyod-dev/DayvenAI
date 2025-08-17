@@ -109,7 +109,7 @@ export default function MiniEvents(){
 
   
   return(
-    <div  className={`flex items-center justify-between bg-smoothWhite rounded-lg shadow-sm px-4 py-3 border-l-3 ${statusBorder[data.status]} border border-gray-200 w-full`}>
+    <div  className={`intersect-once intersect:motion-preset-fade-md motion-delay-600 flex items-center justify-between bg-smoothWhite rounded-lg shadow-sm px-4 py-3 border-l-3 ${statusBorder[data.status]} border border-gray-200 w-full`}>
       {/* Icon + Content */}
       <div className="flex-center gap-3 w-full min-w-0">
         {/* Type Icon */}

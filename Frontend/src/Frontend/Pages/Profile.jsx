@@ -1,4 +1,4 @@
-import { Settings,Download } from "lucide-react";
+import { Settings, Download, Wrench, Loader, Lightbulb,ArrowUp } from "lucide-react";
 import { weekAvailability } from "../../Backend/Data/Data";
 import { useEffect, useState } from "react";
 import Table from "../Components/Table";
@@ -52,43 +52,28 @@ export default function Profile({user}){
           <div className="w-full space-y-2 h-[2px] rounded-full bg-gray-300"></div>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <h2 className="poppins-bold text-lg md:text-xl">Availabilty</h2>
+        <div className="mt-10 flex-center flex-col gap-2 text-center">
+          <Loader size={35} className="text-gray-400 animate-spin" />
 
-          <div className="motion-preset-fade-md motion-delay-200 bg-smoothWhite p-4 rounded-xl border border-gray-200 shadow-md w-fit mb-4">
-            <div className="flex items-center gap-2">
-              <h3 className="poppins-bold text-xs md:text-base text-gray-700">Available Daily:</h3>
-              <span className="poppins-bold text-base md:text-xl text-gradient1">9:00 AM – 5:00 PM</span>
-            </div>
+          <h1 className="poppins-bold text-2xl text-gradient1">Work in Progress</h1>
+          <p className="text-sm md:text-base font-medium text-myblack/70">
+            The Developer is still thinking what to put here
+          </p>
+
+          <div className="mt-4 flex items-center gap-3 rounded-xl border border-dashed p-3 text-gray-700 cursor-pointer hover:text-gradient1 hover:border-gradient1 transition">
+            <Lightbulb className="h-4 w-4" />
+            <p className="text-sm">
+              Got ideas? Jot them down here or come back later for updates.
+            </p>
           </div>
 
-          <div className="motion-preset-fade-md motion-delay-250 flex justify-between gap-[2px] text-center rounded-md shadow-md">
-            {Setter.map((data) => (
-              <div
-                key={data.day}
-                onClick={()=> setDays(data,Setter)}
-                className={` transition-all ease-in duration-75
-                            ${data.day === 'Sun' && 'rounded-l-lg'} ${data.day === 'Sat' && 'rounded-r-lg'} ${data.status === 'Unavailable' ? 'bg-red-400 hover:bg-red-300':'bg-green-400 hover:bg-green-300' }
-                            flex-1  py-4 md:py-8 text-sm md:text-lg poppins-bold text-smoothWhite `}
-              >
-                {data.day}
-              </div>
-            ))}
+          <div className="text-myblack/70 flex-center flex-col mt-4">
+            <ArrowUp className="animate-bounce" />
+            <p className="text-sm md:text-base font-medium">Click up here!</p>
           </div>
-
-          <button onClick={Apply} disabled={!Changes} className={`self-center ${Changes ? 'bg-gradient1':'bg-gradient1/50'}  
-          motion-preset-fade-md motion-delay-300
-          text-xs md:text-sm rounded-md mt-3 md:mt-5 text-smoothWhite poppins-semibold p-2 px-4 w-fit anim`}>Apply changes</button>
         </div>
-
-        <h2 className="poppins-bold text-lg md:text-xl">Working Schedule</h2>
-        <div className="w-full flex-center">
-          <Table/>
-        </div>
-        
-          <button onClick={Apply} disabled={!Changes} className="mt-2 px-4 py-2 text-sm anim rounded-md bg-gradient1 text-smoothWhite w-fit self-center flex-center gap-2 poppins-semibold">Download<Download size={18} strokeWidth={2.5} /></button>
-
       </div>
     </div>
   );
 }
+

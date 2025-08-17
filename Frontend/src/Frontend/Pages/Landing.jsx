@@ -153,7 +153,7 @@ export default function Landing(){
 
               <CircleArrowRight className='w-20 hidden xl:block transition-all ease-in duration-75 hover:text-gradient1' size={50} strokeWidth={1} />
 
-              <div className='intersect-once intersect:motion-preset-fade-md motion-delay-800 flex-1 w-full h-100  border-t-3 border-t-gradient1 bg-smoothWhite rounded-xl shadow-lg'>
+              <div className=' flex-1 w-full h-100  border-t-3 border-t-gradient1 bg-smoothWhite rounded-xl shadow-lg'>
                 <MiniEvents/>
               </div>
             </div>
