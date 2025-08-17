@@ -60,12 +60,12 @@ export default function Profile({user}){
             The Developer is still thinking what to put here
           </p>
 
-          <div className="mt-4 flex items-center gap-3 rounded-xl border border-dashed p-3 text-gray-700 cursor-pointer hover:text-gradient1 hover:border-gradient1 transition">
+          <a href="https://forms.gle/DWNNvA4rd2e4touRA" target="_blank" className="mt-4 flex items-center gap-3 rounded-xl border border-dashed p-3 text-gray-700 cursor-pointer hover:text-gradient1 hover:border-gradient1 transition">
             <Lightbulb className="h-4 w-4" />
             <p className="text-sm">
               Got ideas? Jot them down here or come back later for updates.
             </p>
-          </div>
+          </a>
 
           <div className="text-myblack/70 flex-center flex-col mt-4">
             <ArrowUp className="animate-bounce" />
