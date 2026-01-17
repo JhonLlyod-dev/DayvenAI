@@ -4,7 +4,7 @@ import { SimplePrompt } from "./SystemPrompt";
 
 const token = import.meta.env.VITE_DAYVEN_AI_API_KEY2;
 const endpoint = "https://models.github.ai/inference";
-const model = "openai/gpt-5";
+const model = "openai/gpt-4.1";
 
 export async function main(Prompt,conversation,events) {
 
